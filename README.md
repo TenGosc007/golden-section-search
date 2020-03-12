@@ -25,10 +25,19 @@ W miejsce `/path/to/new/virtual/environment` można wstawić po prostu `venv`, w
 source /path/to/new/virtual/environment/bin/activate
 ```
 
+Windows:
+```
+.\venv\Scripts\activate
+```
+
 ### Instalacja paczek
 Wszystkie potrzebne do uruchomienia projektu paczki można znaleźć w pliku `setup.py` w części `install_requires`. W celu zainstalowania potrzebnych paczek należy wpisać:
 ```
 python3 setup.py install
+```
+
+```
+pip install pyqt5
 ```
 
 ### Uruchamianie aplikacji
