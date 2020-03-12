@@ -4,7 +4,6 @@ Myśle, że dobrym pomysłem jest zebranie sobie w jednym miejscu wszystkich ust
 
 ## Organizacja pracy
 - Cotygodniowe spotkania na programowanie w celu synchronizacji i wyznaczenia celów na najbliższy tydzień (Sobota, 10:00, F2F)
-- ...
 
 ## Git Flow
 - Branch per user
@@ -13,7 +12,10 @@ Myśle, że dobrym pomysłem jest zebranie sobie w jednym miejscu wszystkich ust
   - wiadomość w języku angielskim
   - brak kropki na końcu wiadomości
   - zawsze dokładna nazwa pliku (README.md, app.py itd.)
- - ...
+ - Każdy naprawia swoje błędy - otwieramy issue
 
 ## Clean Code
-...
+- Używać opisowych nazw zmiennych, funkcji itp.
+- Pisać docstringi zakończone kropką
+- Unikać pisania zbędnych komentarzy - kod powinien się sam opisywać
+- Piszemy testy, które coś sprawdzają i wrzucamy otestowany kod
