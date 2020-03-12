@@ -1,33 +1,20 @@
 import sys
 
-from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel
+from PyQt5.QtWidgets import QApplication
 
-from src.config import Config
+from src.window import Window
 
 
 class Application:
     def __init__(self):
-        self.config = Config()
+        self.app = QApplication(sys.argv)
+        self.window = Window()
 
-    def window(self):
-        """Function sets up application window."""
-        app = QApplication(sys.argv)
-        win = QMainWindow()
-        win.setGeometry(self.config.X_POS, self.config.Y_POS, self.config.APP_WIDTH, self.config.APP_HEIGHT)
-        win.setWindowTitle('Golden Section Search')
-
-        self.create_label(win, 'Enter function', 10, 10)
-
-        win.show()
-        sys.exit(app.exec_())
-
-    @staticmethod
-    def create_label(win, text, x_pos, y_pos):
-        """Function create label on the app window."""
-        label = QLabel(win)
-        label.setText(text)
-        label.move(x_pos, y_pos)
+    def show_window(self):
+        """Function shows application window."""
+        self.window.show()
+        sys.exit(self.app.exec_())
 
     def run(self):
         """Function starts the application."""
-        self.window()
+        self.show_window()
