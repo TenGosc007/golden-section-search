@@ -1,5 +1,5 @@
 # Golden Section Search
-Implementacja projektu na zajęcia z Teorii Sterowania. Wszystkie materiały związane z projektem można znaleźć w folderze `docs`.
+Implementacja projektu na zajęcia z Teorii Sterowania. Wszystkie materiały związane z projektem można znaleźć w folderze [docs](docs/).
 
 ## Temat projektu
 Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego podziału) - optymalizacja funkcji nieliniowej ciągłej bez ograniczneń dla podanego kierunku poszukiwań. Omówienie efektywności działania algorytmu dla różnych funkcji testowych.
