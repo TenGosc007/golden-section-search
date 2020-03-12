@@ -5,5 +5,5 @@ setup(
     version='1.0.0',
     author='Aleksander Atamańczuk, Damian Schmidt',
     packages=find_packages(),
-    install_requires=[],
+    install_requires=['PyQt5'],
 )
