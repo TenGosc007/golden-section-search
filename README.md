@@ -26,9 +26,9 @@ source /path/to/new/virtual/environment/bin/activate
 ```
 
 ### Instalacja paczek
-Wszystkie potrzebne do uruchomienia projektu paczki można znaleźć w pliku `setup.py` w części `install_requires`. W celu zainstalowania potrzebnych paczek należy wpisać:
+Wszystkie potrzebne do uruchomienia projektu paczki można znaleźć w pliku [requirements.txt](requirements.txt). W celu zainstalowania potrzebnych paczek należy wpisać:
 ```
-python3 setup.py install
+pip3 install -r requirements.txt
 ```
 
 ### Uruchamianie aplikacji
