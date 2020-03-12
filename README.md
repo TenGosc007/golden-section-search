@@ -13,36 +13,31 @@ Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego p
 - [ ] Zrobienie dokumentacji projektu
 
 ## Praca z projektem
-Aby uruchomić aplikację po sklonowaniu repozytorium, należy zainstalować wymagane paczki. Instrukcja jest napisana dla systemu Linux. Na Windowsie zasada działania jest podobna, ale komendy się nieznacznie różnią.
+Aby uruchomić aplikację po sklonowaniu repozytorium, należy zainstalować wymagane paczki.
 
 ### Virual Enviroment
 Żeby nie zaśmiecać sobie kompa globalnie, warto stworzyć wirtualne środowisko. PyCharm robi to automatycznie, kiedy tworzy projekt, ale jeśli wykorzystywane jest inne IDE albo venv nie został stworzony można to zrobić wpisując w terminal komendę:
 ```
-python3 -m venv /path/to/new/virtual/environment
+python3 -m venv /path/to/new/virtual/environment (Linux)
+python -m venv /path/to/new/virtual/environment (Windows)
 ```
 W miejsce `/path/to/new/virtual/environment` można wstawić po prostu `venv`, wtedy środowisko zostanie stworzone w folderze, w którym aktualnie znajduje się użytkownik pod folderm `venv`. Aby aktywować środowisko należy wpisać:
 ```
-source /path/to/new/virtual/environment/bin/activate
-```
-
-Windows:
-```
-.\venv\Scripts\activate
+source /path/to/new/virtual/environment/bin/activate (Linux)
+.\path\to\new\virtual\environment\Scripts\activate (Windows)
 ```
 
 ### Instalacja paczek
 Wszystkie potrzebne do uruchomienia projektu paczki można znaleźć w pliku [requirements.txt](requirements.txt). W celu zainstalowania potrzebnych paczek należy wpisać:
 ```
-pip3 install -r requirements.txt
-```
-
-```
-pip install pyqt5
+pip3 install -r requirements.txt (Linux)
+pip install -r requirements.txt (Windows)
 ```
 
 ### Uruchamianie aplikacji
 Uruchomienie aplikacji sprowadza się do wpisania komendy:
 ```
-python3 run.py
+python3 run.py (Linux)
+python run.py (Windows)
 ```
 Oczywiście można zrobić to z IDE uruchamiając plik `run.py`.
