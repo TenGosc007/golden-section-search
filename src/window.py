@@ -14,7 +14,7 @@ class Window(QMainWindow):
     def init_ui(self):
         """Function initializes user interface."""
         self.func_label = self.create_label('Enter function', 10, 10)
-        self.func_button = self.create_button('Click me!', 10, 50, self.clicked)
+        self.func_button = self.create_button('Click this button!', 10, 50, self.clicked)
 
     def create_label(self, text, x_pos, y_pos):
         """Function create label on the app window."""
