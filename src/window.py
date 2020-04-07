@@ -1,5 +1,5 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QComboBox
+from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QComboBox, QLineEdit, QTextBrowser
 
 from src.config import Config
 
@@ -15,11 +15,16 @@ class Window(QMainWindow):
 
     def init_ui(self):
         """Function initializes user interface."""
-        self.func_label = self.create_label(20, 20, 'Funkcja wejściowa f(x)')
         function_list = self.get_template_function_list()
+        self.func_label = self.create_label(20, 20, 'Funkcja wejściowa y')
         self.func_combo_box = self.create_combobox(20, 45, 500, 25, function_list)
-        self.func_button = self.create_button(530, 45, 0, 25, 'Wyświetl funkcje', self.print_function)
-        self.print_label = self.create_label(20, 80, '')
+
+        self.iteration_label = self.create_label(20, 80, 'Liczba iteracji')
+        self.iteration_input = self.create_input(20, 105, 500, 25)
+
+        self.prompter = self.create_prompter(20, Config.APP_HEIGHT - 320, 500, 300)
+
+        self.func_button = self.create_button(170, 150, 200, 25, 'Wyświetl', self.print_on_prompter, auto_size=False)
 
     def create_label(self, x, y, text):
         """Function creates label on the app window."""
@@ -29,12 +34,13 @@ class Window(QMainWindow):
         label.adjustSize()
         return label
 
-    def create_button(self, x, y, width, height, text, function):
+    def create_button(self, x, y, width, height, text, function, auto_size=True):
         """Function creates button on the app window."""
         button = QPushButton(self)
         button.setGeometry(QtCore.QRect(x, y, width, height))
         button.setText(text)
-        button.adjustSize()
+        if auto_size:
+            button.adjustSize()
         button.clicked.connect(function)
         return button
 
@@ -49,12 +55,28 @@ class Window(QMainWindow):
                 combo_box.addItem(item)
         return combo_box
 
+    def create_input(self, x, y, width, height):
+        """Function creates input."""
+        input_field = QLineEdit(self)
+        input_field.setGeometry(QtCore.QRect(x, y, width, height))
+        return input_field
+
+    def create_prompter(self, x, y, width, height):
+        """Function creates prompter to display all app states."""
+        prompter = QTextBrowser(self)
+        prompter.setGeometry(QtCore.QRect(x, y, width, height))
+        return prompter
+
     def get_template_function_list(self):
         """Function returns list of template functions."""
         return self.config.TEMPLATE_FUNCTIONS
 
-    def print_function(self):
+    def print_on_prompter(self):
         """Function changes text to function in combo_box"""
         function = str(self.func_combo_box.currentText())
-        self.print_label.setText(function)
-        self.print_label.adjustSize()
+        iterations = str(self.iteration_input.text())
+
+        string = f'Funkcja wejściowa:\ny = {function}\n\n' \
+                 f'Liczba iteracji:\n{iterations}'
+
+        self.prompter.setText(string)

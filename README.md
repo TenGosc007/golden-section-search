@@ -10,6 +10,8 @@ Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego p
 - [X] Dodanie przykładowych funkcji
 - [ ] Implementacja GUI
     - [X] ComboBox z możliwością wpisywania
+    - [X] Możliwość wpisania ilości iteracji (kryt. stopu)
+    - [X] Prompter do obserwacji wyników
     - [ ] ...
 - [ ] Implementacja parsera funkcji
 - [ ] Zrozumienie działania metody
