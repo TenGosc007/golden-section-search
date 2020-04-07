@@ -27,9 +27,12 @@ class Window(QMainWindow):
         self.iteration_input = self.create_input(430, 105, 90, 25, enabled=False)
         self.stop_criterion_combo_box.currentIndexChanged.connect(self.enable_iterations_input)
 
+        self.direction_label = self.create_label(20, 140, 'Kierunek poszukiwań')
+        self.direction_input = self.create_input(20, 165, 500, 25)
+
         self.prompter = self.create_prompter(20, Config.APP_HEIGHT - 320, 500, 300)
 
-        self.func_button = self.create_button(170, 150, 200, 25, 'Wyświetl', self.print_on_prompter, auto_size=False)
+        self.func_button = self.create_button(170, 210, 200, 25, 'Wyświetl', self.print_on_prompter, auto_size=False)
 
     def create_label(self, x, y, text):
         """Function creates label on the app window."""
@@ -97,12 +100,14 @@ class Window(QMainWindow):
         """Function changes text to function in combo_box"""
         function = str(self.func_combo_box.currentText())
         stop_criterion = str(self.stop_criterion_combo_box.currentText())
+        direction = str(self.direction_input.text())
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
 
-        if not function or stop_criterion == 'Liczba iteracji L = ':
+        if not function or stop_criterion == 'Liczba iteracji L = ' or not direction:
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
         else:
             string = f'Funkcja wejściowa:\ny = {function}\n\n' \
-                     f'Kryterium stopu:\n{stop_criterion}\n\n'
+                     f'Kryterium stopu:\n{stop_criterion}\n\n' \
+                     f'Kierunek poszukiwań:\n{direction}'
             self.prompter.setText(string)

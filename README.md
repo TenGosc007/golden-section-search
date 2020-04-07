@@ -9,9 +9,10 @@ Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego p
 - [X] Ustalenie workflow i wymagań projektu (np. wersja intepretera Pythona)
 - [X] Dodanie przykładowych funkcji
 - [ ] Implementacja GUI
-    - [X] ComboBox z możliwością wpisywania
+    - [X] ComboBox z możliwością wpisywania funkcji
     - [X] Możliwość wyboru kryterium stopu
     - [X] Możliwość wpisania ilości iteracji (kryt. stopu)
+    - [X] Możliwość wpisania kierunku poszukiwań
     - [X] Prompter do obserwacji wyników
     - [ ] ...
 - [ ] Implementacja parsera funkcji
