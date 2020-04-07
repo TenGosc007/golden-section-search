@@ -6,8 +6,12 @@ Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego p
 
 ## TODO
 - [X] Stworzenie repozytorium i podstawowej struktury projektu
-- [ ] Ustalenie workflow i wymagań projektu (np. wersja intepretera Pythona)
+- [X] Ustalenie workflow i wymagań projektu (np. wersja intepretera Pythona)
+- [X] Dodanie przykładowych funkcji
 - [ ] Implementacja GUI
+    - [X] ComboBox z możliwością wpisywania
+    - [ ] ...
+- [ ] Implementacja parsera funkcji
 - [ ] Zrozumienie działania metody
 - [ ] ...
 - [ ] Zrobienie dokumentacji projektu
