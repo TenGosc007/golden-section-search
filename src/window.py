@@ -27,12 +27,41 @@ class Window(QMainWindow):
         self.iteration_input = self.create_input(430, 105, 90, 25, enabled=False)
         self.stop_criterion_combo_box.currentIndexChanged.connect(self.enable_iterations_input)
 
-        self.direction_label = self.create_label(20, 140, 'Kierunek poszukiwań')
-        self.direction_input = self.create_input(20, 165, 500, 25)
+        self.search_range_label = self.create_label(20, 140, 'Przedziały poszukiwań')
+
+        self.x1_label = self.create_label(20, 165, 'Dla x1:')
+        self.x1_a_label = self.create_label(100, 165, 'a = ')
+        self.x1_a_input = self.create_input(130, 165, 100, 25)
+        self.x1_b_label = self.create_label(250, 165, 'b = ')
+        self.x1_b_input = self.create_input(280, 165, 100, 25)
+
+        self.x2_label = self.create_label(20, 200, 'Dla x2:')
+        self.x2_a_label = self.create_label(100, 200, 'a = ')
+        self.x2_a_input = self.create_input(130, 200, 100, 25)
+        self.x2_b_label = self.create_label(250, 200, 'b = ')
+        self.x2_b_input = self.create_input(280, 200, 100, 25)
+
+        self.x3_label = self.create_label(20, 235, 'Dla x3:')
+        self.x3_a_label = self.create_label(100, 235, 'a = ')
+        self.x3_a_input = self.create_input(130, 235, 100, 25)
+        self.x3_b_label = self.create_label(250, 235, 'b = ')
+        self.x3_b_input = self.create_input(280, 235, 100, 25)
+
+        self.x4_label = self.create_label(20, 270, 'Dla x4:')
+        self.x4_a_label = self.create_label(100, 270, 'a = ')
+        self.x4_a_input = self.create_input(130, 270, 100, 25)
+        self.x4_b_label = self.create_label(250, 270, 'b = ')
+        self.x4_b_input = self.create_input(280, 270, 100, 25)
+
+        self.x5_label = self.create_label(20, 305, 'Dla x5:')
+        self.x5_a_label = self.create_label(100, 305, 'a = ')
+        self.x5_a_input = self.create_input(130, 305, 100, 25)
+        self.x5_b_label = self.create_label(250, 305, 'b = ')
+        self.x5_b_input = self.create_input(280, 305, 100, 25)
 
         self.prompter = self.create_prompter(20, Config.APP_HEIGHT - 320, 500, 300)
 
-        self.func_button = self.create_button(170, 210, 200, 25, 'Wyświetl', self.print_on_prompter, auto_size=False)
+        self.func_button = self.create_button(170, 355, 200, 25, 'Wyświetl', self.print_on_prompter, auto_size=False)
 
     def create_label(self, x, y, text):
         """Function creates label on the app window."""
@@ -100,14 +129,24 @@ class Window(QMainWindow):
         """Function changes text to function in combo_box"""
         function = str(self.func_combo_box.currentText())
         stop_criterion = str(self.stop_criterion_combo_box.currentText())
-        direction = str(self.direction_input.text())
+        x1a, x1b = str(self.x1_a_input.text()), str(self.x1_b_input.text())
+        x2a, x2b = str(self.x2_a_input.text()), str(self.x2_b_input.text())
+        x3a, x3b = str(self.x3_a_input.text()), str(self.x3_b_input.text())
+        x4a, x4b = str(self.x4_a_input.text()), str(self.x4_b_input.text())
+        x5a, x5b = str(self.x5_a_input.text()), str(self.x5_b_input.text())
+
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
 
-        if not function or stop_criterion == 'Liczba iteracji L = ' or not direction:
+        if not function or stop_criterion == 'Liczba iteracji L = ':
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
         else:
             string = f'Funkcja wejściowa:\ny = {function}\n\n' \
                      f'Kryterium stopu:\n{stop_criterion}\n\n' \
-                     f'Kierunek poszukiwań:\n{direction}'
+                     f'Przedziały poszukiwań:\n' \
+                     f'Dla x1: a={x1a}, b={x1b}\n' \
+                     f'Dla x2: a={x2a}, b={x2b}\n' \
+                     f'Dla x3: a={x3a}, b={x3b}\n' \
+                     f'Dla x4: a={x4a}, b={x4b}\n' \
+                     f'Dla x5: a={x5a}, b={x5b}'
             self.prompter.setText(string)
