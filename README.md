@@ -14,10 +14,12 @@ Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego p
     - [X] Możliwość wpisania ilości iteracji (kryt. stopu)
     - [X] Możliwość wpisania przedziałów poszukiwań
     - [X] Prompter do obserwacji wyników
+    - [ ] Rysowanie warstwic dla n = 2
+    - [ ] Możliwość wpisywania ograniczeń rysunku
     - [ ] ...
+- [X] Implementacja algorytmu dla n = 1
 - [ ] Implementacja parsera funkcji
-- [ ] Zrozumienie działania metody
-- [ ] Implementacja algorytmy dla n = 1
+- [ ] Implementacja algorytmu dla n <= 5
 - [ ] ...
 - [ ] Zrobienie dokumentacji projektu
 
