@@ -40,17 +40,27 @@ class Parser:
         return result
 
     def term(self):
-        result = self.factor()
+        result = self.expon()
 
         while self.current_token != None and self.current_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE):
             if self.current_token.type == TokenType.MULTIPLY:
                 self.advance()
-                result = MultiplyNode(result, self.factor())
+                result = MultiplyNode(result, self.expon())
             elif self.current_token.type == TokenType.DIVIDE:
                 self.advance()
-                result = DivideNode(result, self.factor())
-
+                result = DivideNode(result, self.expon())
+                
         return result
+
+    def expon(self):        # exponentiation
+        result = self.factor()
+
+        while self.current_token != None and self.current_token.type == TokenType.POWER:
+            if self.current_token.type == TokenType.POWER:
+                self.advance()
+                result = PowerNode(result, self.factor())         
+
+        return result    
 
     def factor(self):
         token = self.current_token
@@ -80,5 +90,21 @@ class Parser:
         elif token.type == TokenType.MINUS:
             self.advance()
             return MinusNode(self.factor())
+
+        elif token.type == TokenType.SIN:
+            self.advance()
+            return SinusNode(self.factor())
+
+        elif token.type == TokenType.COS:
+            self.advance()
+            return CosinusNode(self.factor())
+
+        elif token.type == TokenType.EXP:
+            self.advance()
+            return ExponentNode(self.factor())
+
+        elif token.type == TokenType.SQRT:
+            self.advance()
+            return SquareNode(self.factor())
 
         self.raise_error()

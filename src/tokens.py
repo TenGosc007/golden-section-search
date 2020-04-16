@@ -10,6 +10,11 @@ class TokenType(Enum):
     LPAREN      = 5
     RPAREN      = 6
     LETTER      = 7
+    POWER       = 8
+    SIN         = 9
+    COS         = 10
+    EXP         = 11
+    SQRT        = 12
 
 @dataclass
 class Token:

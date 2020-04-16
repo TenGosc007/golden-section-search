@@ -14,6 +14,12 @@ class Lexer:
             self.current_char = next(self.text)
         except StopIteration:
             self.current_char = None
+
+    def retreat(self):
+        try:
+            self.current_char = (self.text)
+        except StopIteration:
+            self.current_char = None
     
     def generate_tokens(self):
         while self.current_char != None:
@@ -21,8 +27,6 @@ class Lexer:
                 self.advance()
             elif self.current_char == '.' or self.current_char in DIGITS:
                 yield self.generate_number()
-            elif self.current_char in LETTERS:
-                yield self.generate_letter()
             elif self.current_char == '+':
                 self.advance()
                 yield Token(TokenType.PLUS)
@@ -41,6 +45,47 @@ class Lexer:
             elif self.current_char == ')':
                 self.advance()
                 yield Token(TokenType.RPAREN)
+            elif self.current_char == '^':
+                self.advance()
+                yield Token(TokenType.POWER)
+
+            elif self.current_char == 's':
+                self.advance()
+                if self.current_char == 'i':
+                    self.advance()
+                    if self.current_char == 'n':
+                        self.advance()
+                        yield Token(TokenType.SIN)
+                elif self.current_char == 'q':
+                    self.advance()
+                    if self.current_char == 'r':
+                        self.advance()
+                        if self.current_char == 't':
+                            self.advance()
+                            yield Token(TokenType.SQRT)
+
+            elif self.current_char == 'c':
+                prev = self.current_char
+                self.advance()
+                if self.current_char == 'o':
+                    self.advance()
+                    if self.current_char == 's':
+                        self.advance()
+                        yield Token(TokenType.COS)
+                else:
+                    self.current_char = prev
+                    yield self.generate_letter()
+
+            elif self.current_char == 'e':
+                self.advance()
+                if self.current_char == 'x':
+                    self.advance()
+                    if self.current_char == 'p':
+                        self.advance()
+                        yield Token(TokenType.EXP)
+
+            elif self.current_char in LETTERS:
+                yield self.generate_letter()
             else:
                 raise Exception(f"Illegal character '{self.current_char}'")
 

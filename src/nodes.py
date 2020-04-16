@@ -45,6 +45,14 @@ class DivideNode:
         return f"({self.node_a}/{self.node_b})"
 
 @dataclass
+class PowerNode:
+    node_a: any
+    node_b: any
+
+    def __repr__(self):
+        return f"({self.node_a}^{self.node_b})"
+
+@dataclass
 class PlusNode:
     node: any
 
@@ -57,3 +65,31 @@ class MinusNode:
 
     def __repr__(self):
         return f"(-{self.node})"
+
+@dataclass
+class SinusNode:
+    node: any
+
+    def __repr__(self):
+        return f"sin({self.node})"
+
+@dataclass
+class CosinusNode:
+    node: any
+
+    def __repr__(self):
+        return f"cos({self.node})"
+
+@dataclass
+class ExponentNode:
+    node: any
+
+    def __repr__(self):
+        return f"exp({self.node})"
+
+@dataclass
+class SquareNode:
+    node: any
+
+    def __repr__(self):
+        return f"sqrt({self.node})"
