@@ -81,7 +81,10 @@ class Parser:
 
         elif token.type == TokenType.LETTER:
             self.advance()
-            return LetterNode(token.value)
+            if self.current_token != None and self.current_token.type == TokenType.NUMBER:
+                return IndexNode(token.value, self.factor())
+            else:
+                return LetterNode(token.value)
 
         elif token.type == TokenType.PLUS:
             self.advance()

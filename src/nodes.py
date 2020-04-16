@@ -13,6 +13,14 @@ class LetterNode:
         return f"{self.value}"
 
 @dataclass
+class IndexNode:
+    node_a: any
+    node_b: any
+
+    def __repr__(self):
+        return f"({self.node_a}{self.node_b})"
+
+@dataclass
 class AddNode:
     node_a: any
     node_b: any
@@ -93,3 +101,4 @@ class SquareNode:
 
     def __repr__(self):
         return f"sqrt({self.node})"
+        
