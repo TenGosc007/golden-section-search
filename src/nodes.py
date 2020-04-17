@@ -1,16 +1,21 @@
 from dataclasses import dataclass
 
+
 @dataclass
 class NumberNode:
     value: float
+
     def __repr__(self):
         return f"{self.value}"
+
 
 @dataclass
 class LetterNode:
     value: str
+
     def __repr__(self):
         return f"{self.value}"
+
 
 @dataclass
 class IndexNode:
@@ -20,6 +25,7 @@ class IndexNode:
     def __repr__(self):
         return f"({self.node_a}{self.node_b})"
 
+
 @dataclass
 class AddNode:
     node_a: any
@@ -27,6 +33,7 @@ class AddNode:
 
     def __repr__(self):
         return f"({self.node_a}+{self.node_b})"
+
 
 @dataclass
 class SubtractNode:
@@ -36,6 +43,7 @@ class SubtractNode:
     def __repr__(self):
         return f"({self.node_a}-{self.node_b})"
 
+
 @dataclass
 class MultiplyNode:
     node_a: any
@@ -43,6 +51,7 @@ class MultiplyNode:
 
     def __repr__(self):
         return f"({self.node_a}*{self.node_b})"
+
 
 @dataclass
 class DivideNode:
@@ -52,6 +61,7 @@ class DivideNode:
     def __repr__(self):
         return f"({self.node_a}/{self.node_b})"
 
+
 @dataclass
 class PowerNode:
     node_a: any
@@ -60,12 +70,14 @@ class PowerNode:
     def __repr__(self):
         return f"({self.node_a}^{self.node_b})"
 
+
 @dataclass
 class PlusNode:
     node: any
 
     def __repr__(self):
         return f"(+{self.node})"
+
 
 @dataclass
 class MinusNode:
@@ -74,12 +86,14 @@ class MinusNode:
     def __repr__(self):
         return f"(-{self.node})"
 
+
 @dataclass
 class SinusNode:
     node: any
 
     def __repr__(self):
         return f"sin({self.node})"
+
 
 @dataclass
 class CosinusNode:
@@ -88,6 +102,7 @@ class CosinusNode:
     def __repr__(self):
         return f"cos({self.node})"
 
+
 @dataclass
 class ExponentNode:
     node: any
@@ -95,10 +110,10 @@ class ExponentNode:
     def __repr__(self):
         return f"exp({self.node})"
 
+
 @dataclass
 class SquareNode:
     node: any
 
     def __repr__(self):
         return f"sqrt({self.node})"
-        

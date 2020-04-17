@@ -1,8 +1,9 @@
-from tokens import Token, TokenType
+from src.tokens import Token, TokenType
 
 WHITESPACE = ' \n\t'
 DIGITS = '0123456789'
 LETTERS = 'abcxyz'
+
 
 class Lexer:
     def __init__(self, text):
@@ -17,12 +18,12 @@ class Lexer:
 
     def retreat(self):
         try:
-            self.current_char = (self.text)
+            self.current_char = self.text
         except StopIteration:
             self.current_char = None
-    
+
     def generate_tokens(self):
-        while self.current_char != None:
+        while self.current_char is not None:
             if self.current_char in WHITESPACE:
                 self.advance()
             elif self.current_char == '.' or self.current_char in DIGITS:
@@ -94,7 +95,7 @@ class Lexer:
         number_str = self.current_char
         self.advance()
 
-        while self.current_char != None and (self.current_char == '.' or self.current_char in DIGITS):
+        while self.current_char is not None and (self.current_char == '.' or self.current_char in DIGITS):
             if self.current_char == '.':
                 decimal_point_count += 1
                 if decimal_point_count > 1:
@@ -111,8 +112,9 @@ class Lexer:
         return Token(TokenType.NUMBER, float(number_str))
 
     def generate_letter(self):
-        if self.current_char != None and self.current_char in LETTERS:
+        if self.current_char is not None and self.current_char in LETTERS:
             letter = self.current_char
             self.advance()
 
+        # TODO: Local variable 'letter' might be reference before assignment! Olek please check it
         return Token(TokenType.LETTER, letter)
