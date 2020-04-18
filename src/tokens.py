@@ -22,6 +22,7 @@ class TokenType(Enum):
 
 @dataclass
 class Token:
+    """Class returns tokens."""
     type: TokenType
     value: any = None
 

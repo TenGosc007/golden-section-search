@@ -8,6 +8,7 @@ class Parser:
         self.advance()
 
     def advance(self):
+        """Iterative function."""
         try:
             self.current_token = next(self.tokens)
         except StopIteration:
@@ -17,6 +18,7 @@ class Parser:
         raise Exception("Invalid syntax")
 
     def parse(self):
+        """The main function of the parser."""
         if self.current_token is None:
             return None
 
@@ -28,6 +30,7 @@ class Parser:
         return result
 
     def expr(self):
+        """Expression- addition and subtraction functions, the highest level of hierarchy."""
         result = self.term()
 
         while self.current_token is not None and self.current_token.type in (TokenType.PLUS, TokenType.MINUS):
@@ -41,6 +44,7 @@ class Parser:
         return result
 
     def term(self):
+        """Terms - Multiplication and division functions, lower hierarchy level."""
         result = self.expon()
 
         while self.current_token is not None and self.current_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE):
@@ -53,7 +57,8 @@ class Parser:
 
         return result
 
-    def expon(self):  # exponentiation
+    def expon(self):  
+        """Exponentiation - power function, lower hierarchy level."""
         result = self.factor()
 
         while self.current_token is not None and self.current_token.type == TokenType.POWER:
@@ -64,6 +69,7 @@ class Parser:
         return result
 
     def factor(self):
+        """Other functions, lowest hierarchy level."""
         token = self.current_token
 
         if token.type == TokenType.LPAREN:

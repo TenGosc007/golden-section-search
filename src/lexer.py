@@ -11,18 +11,14 @@ class Lexer:
         self.advance()
 
     def advance(self):
+        """Iterative function."""
         try:
             self.current_char = next(self.text)
         except StopIteration:
             self.current_char = None
 
-    def retreat(self):
-        try:
-            self.current_char = self.text
-        except StopIteration:
-            self.current_char = None
-
     def generate_tokens(self):
+        """Function creates tokens for each expression."""
         while self.current_char is not None:
             if self.current_char in WHITESPACE:
                 self.advance()
@@ -99,6 +95,7 @@ class Lexer:
                 raise Exception(f"Illegal character '{self.current_char}'")
 
     def generate_number(self):
+        """Function create nubmer token and supports dot expression."""
         decimal_point_count = 0
         number_str = self.current_char
         self.advance()
@@ -120,6 +117,7 @@ class Lexer:
         return Token(TokenType.NUMBER, float(number_str))
 
     def generate_letter(self):
+        """Function create nubmer token and supports index expression."""
         letter = self.current_char
         self.advance()
 

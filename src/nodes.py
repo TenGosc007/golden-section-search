@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-
+"""Functions returns ordered expression."""
 @dataclass
 class NumberNode:
     value: float
