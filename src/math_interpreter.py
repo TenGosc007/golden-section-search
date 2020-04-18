@@ -1,6 +1,6 @@
-from lexer import Lexer
-from parser_ import Parser
-from interpreter import Interpreter
+from src.lexer import Lexer
+from src.math_parser import Parser
+from src.interpreter import Interpreter
 
 # TEMPLATE_FUNCTIONS = [
 #         'x1^4 + x2^4 - 0.62*x1^2 - 0.62*x2^2',  # funkcja z czterema minimami lokalnymi
@@ -46,5 +46,3 @@ while True:
     except Exception as e:
         print(e)
         break
-        
-

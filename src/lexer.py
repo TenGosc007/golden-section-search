@@ -1,8 +1,9 @@
-from tokens import Token, TokenType
+from src.tokens import Token, TokenType
 
 WHITESPACE = ' \n\t'
 DIGITS = '0123456789'
 LETTERS = 'abcxyz'
+
 
 class Lexer:
     def __init__(self, text):
@@ -17,12 +18,12 @@ class Lexer:
 
     def retreat(self):
         try:
-            self.current_char = (self.text)
+            self.current_char = self.text
         except StopIteration:
             self.current_char = None
-    
+
     def generate_tokens(self):
-        while self.current_char != None:
+        while self.current_char is not None:
             if self.current_char in WHITESPACE:
                 self.advance()
             elif self.current_char == '.' or self.current_char in DIGITS:
@@ -45,6 +46,12 @@ class Lexer:
             elif self.current_char == ')':
                 self.advance()
                 yield Token(TokenType.RPAREN)
+            elif self.current_char == '[':
+                self.advance()
+                yield Token(TokenType.LBRACKET)
+            elif self.current_char == ']':
+                self.advance()
+                yield Token(TokenType.RBRACKET)
             elif self.current_char == '^':
                 self.advance()
                 yield Token(TokenType.POWER)
@@ -73,8 +80,10 @@ class Lexer:
                         self.advance()
                         yield Token(TokenType.COS)
                 else:
-                    self.current_char = prev
-                    yield self.generate_letter()
+                    while self.current_char is not None and self.current_char in DIGITS:
+                        prev += self.current_char
+                        self.advance()
+                    yield Token(TokenType.LETTER, prev)
 
             elif self.current_char == 'e':
                 self.advance()
@@ -94,7 +103,7 @@ class Lexer:
         number_str = self.current_char
         self.advance()
 
-        while self.current_char != None and (self.current_char == '.' or self.current_char in DIGITS):
+        while self.current_char is not None and (self.current_char == '.' or self.current_char in DIGITS):
             if self.current_char == '.':
                 decimal_point_count += 1
                 if decimal_point_count > 1:
@@ -111,8 +120,11 @@ class Lexer:
         return Token(TokenType.NUMBER, float(number_str))
 
     def generate_letter(self):
-        if self.current_char != None and self.current_char in LETTERS:
-            letter = self.current_char
+        letter = self.current_char
+        self.advance()
+
+        while self.current_char is not None and self.current_char in DIGITS:
+            letter += self.current_char
             self.advance()
 
         return Token(TokenType.LETTER, letter)

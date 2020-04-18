@@ -1,5 +1,6 @@
-from tokens import TokenType
-from nodes import *
+from src.nodes import *
+from src.tokens import TokenType
+
 
 class Parser:
     def __init__(self, tokens):
@@ -16,12 +17,12 @@ class Parser:
         raise Exception("Invalid syntax")
 
     def parse(self):
-        if self.current_token == None:
+        if self.current_token is None:
             return None
 
         result = self.expr()
 
-        if self.current_token != None:
+        if self.current_token is not None:
             self.raise_error()
 
         return result
@@ -29,7 +30,7 @@ class Parser:
     def expr(self):
         result = self.term()
 
-        while self.current_token != None and self.current_token.type in (TokenType.PLUS, TokenType.MINUS):
+        while self.current_token is not None and self.current_token.type in (TokenType.PLUS, TokenType.MINUS):
             if self.current_token.type == TokenType.PLUS:
                 self.advance()
                 result = AddNode(result, self.term())
@@ -42,25 +43,25 @@ class Parser:
     def term(self):
         result = self.expon()
 
-        while self.current_token != None and self.current_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE):
+        while self.current_token is not None and self.current_token.type in (TokenType.MULTIPLY, TokenType.DIVIDE):
             if self.current_token.type == TokenType.MULTIPLY:
                 self.advance()
                 result = MultiplyNode(result, self.expon())
             elif self.current_token.type == TokenType.DIVIDE:
                 self.advance()
                 result = DivideNode(result, self.expon())
-                
+
         return result
 
-    def expon(self):        # exponentiation
+    def expon(self):  # exponentiation
         result = self.factor()
 
-        while self.current_token != None and self.current_token.type == TokenType.POWER:
+        while self.current_token is not None and self.current_token.type == TokenType.POWER:
             if self.current_token.type == TokenType.POWER:
                 self.advance()
-                result = PowerNode(result, self.factor())         
+                result = PowerNode(result, self.factor())
 
-        return result    
+        return result
 
     def factor(self):
         token = self.current_token
@@ -69,7 +70,17 @@ class Parser:
             self.advance()
             result = self.expr()
 
-            if self.current_token.type !=TokenType.RPAREN:
+            if self.current_token.type != TokenType.RPAREN:
+                self.raise_error()
+
+            self.advance()
+            return result
+
+        if token.type == TokenType.LBRACKET:
+            self.advance()
+            result = self.expr()
+
+            if self.current_token.type != TokenType.RBRACKET:
                 self.raise_error()
 
             self.advance()
@@ -81,10 +92,7 @@ class Parser:
 
         elif token.type == TokenType.LETTER:
             self.advance()
-            if self.current_token != None and self.current_token.type == TokenType.NUMBER:
-                return IndexNode(token.value, self.factor())
-            else:
-                return LetterNode(token.value)
+            return LetterNode(token.value)
 
         elif token.type == TokenType.PLUS:
             self.advance()
