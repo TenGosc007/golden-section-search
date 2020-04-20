@@ -5,29 +5,7 @@ Implementacja projektu na zajęcia z Teorii Sterowania. Wszystkie materiały zwi
 Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego podziału) - optymalizacja funkcji nieliniowej ciągłej bez ograniczneń dla podanego kierunku poszukiwań. Omówienie efektywności działania algorytmu dla różnych funkcji testowych.
 
 ## TODO
-- [X] Stworzenie repozytorium i podstawowej struktury projektu
-- [X] Ustalenie workflow i wymagań projektu (np. wersja intepretera Pythona)
-- [X] Dodanie przykładowych funkcji
-- [ ] Implementacja GUI
-    - [X] ComboBox z możliwością wpisywania funkcji
-    - [X] Możliwość wyboru kryterium stopu
-    - [X] Możliwość wpisania ilości iteracji (kryt. stopu)
-    - [X] Możliwość wpisania przedziałów poszukiwań
-    - [X] Prompter do obserwacji wyników
-    - [ ] Rysowanie warstwic dla n = 2
-    - [ ] Możliwość wpisywania ograniczeń rysunku
-    - [ ] ...
-- [X] Implementacja algorytmu dla n = 1
-- [ ] Implementacja parsera funkcji
-    - [X] Implementacja leksera
-    - [X] Implementacja parsera
-    - [X] Implementacja interpretera
-    - [X] Możliwość przypisania watości do zmiennych
-    - [ ] Wyświetlenie ilości zmiennych w równaniu
-    - [ ] ...
-- [ ] Implementacja algorytmu dla n <= 5
-- [ ] ...
-- [ ] Zrobienie dokumentacji projektu
+Wszystkie taski dotyczące projektu można znaleźć w zakładce [Projects](https://github.com/damianschmidt/golden-section-search/projects/1?add_cards_query=is%3Aopen).
 
 ## Praca z projektem
 Aby uruchomić aplikację po sklonowaniu repozytorium, należy zainstalować wymagane paczki.
