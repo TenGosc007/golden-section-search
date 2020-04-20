@@ -3,9 +3,12 @@ from src.tokens import TokenType
 
 
 class Parser:
-    def __init__(self, tokens):
+    def __init__(self, tokens, vars={}):
         self.tokens = iter(tokens)
         self.advance()
+        self.vars = {}
+        for var in vars.keys():
+            self.vars[var] = vars[var]
 
     def advance(self):
         """Iterative function."""
@@ -98,6 +101,12 @@ class Parser:
 
         elif token.type == TokenType.LETTER:
             self.advance()
+            # Assigning value to a variable
+            for var in self.vars.keys():
+                if var == token.value:
+                    token.value = self.vars.get(var)
+                    return NumberNode(token.value)
+                    
             return LetterNode(token.value)
 
         elif token.type == TokenType.PLUS:
@@ -124,4 +133,4 @@ class Parser:
             self.advance()
             return SquareNode(self.factor())
 
-        self.raise_error()
+        self.raise_error() 

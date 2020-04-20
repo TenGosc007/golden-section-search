@@ -22,6 +22,8 @@ Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego p
     - [X] Implementacja leksera
     - [X] Implementacja parsera
     - [X] Implementacja interpretera
+    - [X] Możliwość przypisania watości do zmiennych
+    - [ ] Wyświetlenie ilości zmiennych w równaniu
     - [ ] ...
 - [ ] Implementacja algorytmu dla n <= 5
 - [ ] ...
