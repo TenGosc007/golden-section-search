@@ -12,24 +12,25 @@ class Algorithm:
     def get_vars_dict(self, a, b, n):
         vars_dict = {}
         for i in range(n):
-            vars_dict['a_' + str(i)] = a[i]
-            vars_dict['b_' + str(i)] = b[i]
-            vars_dict['x1_' + str(i)] = a[i] + (1 - self.k) * (b[i] - a[i])
-            vars_dict['x2_' + str(i)] = a[i] + self.k * (b[i] - a[i])
+            vars_dict[f'a_{i}'] = a[i]
+            vars_dict[f'b_{i}'] = b[i]
+            vars_dict[f'x1_{i}'] = a[i] + (1 - self.k) * (b[i] - a[i])
+            vars_dict[f'x2_{i}'] = a[i] + self.k * (b[i] - a[i])
 
         return vars_dict
 
     def find_minimum_value_n1(self):
+        combinations = self.create_var_combinations(self.n)
         x_min = None
         minimum = None
 
-        while sqrt(pow(self.vars_dict['b_0'] - self.vars_dict['a_0'], 2)) > self.epsilon:
-            fx1 = self.example_function_n1(self.vars_dict['x1_0'])
-            fx2 = self.example_function_n1(self.vars_dict['x2_0'])
+        while self.count_distance() > self.epsilon:
+            points = [self.vars_dict[x[0]] for x in combinations]
+            f_value = [self.example_function_n1(points[i]) for i in range(len(points))]
+            minimum = min(f_value)
             self.iteration += 1
-            minimum = min([fx1, fx2])
 
-            if minimum == fx1:
+            if minimum == f_value[0]:
                 self.vars_dict['b_0'] = self.vars_dict['x2_0']
                 self.vars_dict['x2_0'] = self.vars_dict['x1_0']
                 self.vars_dict['x1_0'] = self.vars_dict['b_0'] - self.k * (
@@ -47,171 +48,81 @@ class Algorithm:
         print(f'Number of iterations {self.iteration}')
 
     def find_minimum_value_n2(self):
-        fek = self.example_function_n2(self.vars_dict['x1_0'], self.vars_dict['x1_1'])
-        ffk = self.example_function_n2(self.vars_dict['x1_0'], self.vars_dict['x2_1'])
-        fhk = self.example_function_n2(self.vars_dict['x2_0'], self.vars_dict['x1_1'])
-        fgk = self.example_function_n2(self.vars_dict['x2_0'], self.vars_dict['x2_1'])
+        combinations = self.create_var_combinations(self.n)
+        points = [(self.vars_dict[x], self.vars_dict[y]) for x, y in combinations]
+        f_value = [self.example_function_n2(points[i]) for i in range(len(points))]
+        minimum = min(f_value)
 
-        minimum = None
-        while sqrt(pow(self.vars_dict['b_0'] - self.vars_dict['a_0'], 2) + pow(
-                self.vars_dict['b_1'] - self.vars_dict['a_1'], 2)) > self.epsilon:
+        while self.count_distance() > self.epsilon:
             self.iteration += 1
-            minimum = min([fek, fhk, ffk, fgk])
+            self.calculate_a_b_value(f_value, minimum, combinations)
+            self.calculate_x1_x2_value()
 
-            if minimum == fek:
-                self.vars_dict['b_0'] = self.vars_dict['x2_0']
-                self.vars_dict['b_1'] = self.vars_dict['x2_1']
-            elif minimum == ffk:
-                self.vars_dict['b_0'] = self.vars_dict['x2_0']
-                self.vars_dict['a_1'] = self.vars_dict['x1_1']
-            elif minimum == fgk:
-                self.vars_dict['a_0'] = self.vars_dict['x1_0']
-                self.vars_dict['a_1'] = self.vars_dict['x1_1']
-            elif minimum == fhk:
-                self.vars_dict['a_0'] = self.vars_dict['x1_0']
-                self.vars_dict['b_1'] = self.vars_dict['x2_1']
+            points = [(self.vars_dict[x], self.vars_dict[y]) for x, y in combinations]
+            f_value = [self.example_function_n2(points[i]) for i in range(len(points))]
+            minimum = min(f_value)
 
-            self.vars_dict['x1_0'] = self.vars_dict['a_0'] + (1 - self.k) * (
-                    self.vars_dict['b_0'] - self.vars_dict['a_0'])
-            self.vars_dict['x2_0'] = self.vars_dict['a_0'] + self.k * (self.vars_dict['b_0'] - self.vars_dict['a_0'])
-            self.vars_dict['x1_1'] = self.vars_dict['a_1'] + (1 - self.k) * (
-                    self.vars_dict['b_1'] - self.vars_dict['a_1'])
-            self.vars_dict['x2_1'] = self.vars_dict['a_1'] + self.k * (self.vars_dict['b_1'] - self.vars_dict['a_1'])
-
-            fek = self.example_function_n2(self.vars_dict['x1_0'], self.vars_dict['x1_1'])
-            ffk = self.example_function_n2(self.vars_dict['x1_0'], self.vars_dict['x2_1'])
-            fhk = self.example_function_n2(self.vars_dict['x2_0'], self.vars_dict['x1_1'])
-            fgk = self.example_function_n2(self.vars_dict['x2_0'], self.vars_dict['x2_1'])
-
-            minimum = min([fek, fhk, ffk, fgk])
-
-        x1_0 = self.vars_dict['x1_0']
-        x2_0 = self.vars_dict['x2_0']
-        x1_1 = self.vars_dict['x1_1']
-        x2_1 = self.vars_dict['x2_1']
-
-        if minimum == fek:
-            print(f'Minimum at the point: ({x1_0},{x1_1})')
-        elif minimum == ffk:
-            print(f'Minimum at the point: ({x1_0},{x2_1})')
-        elif minimum == fhk:
-            print(f'Minimum at the point: ({x2_0},{x1_1}))')
-        elif minimum == fgk:
-            print(f'Minimum at the point: ({x2_0},{x2_1})')
-
-        print(f'Minimum value: {minimum}')
-        print(f'Number of iterations: {self.iteration}')
+        self.print_algorithm_result(f_value, minimum, points)
 
     def find_minimum_value_n3(self):
-        gek = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x1_1'], self.vars_dict['x1_2'])
-        gfk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x2_1'], self.vars_dict['x1_2'])
-        ggk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x1_1'], self.vars_dict['x2_2'])
-        ghk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x2_1'], self.vars_dict['x2_2'])
-        gik = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x1_1'], self.vars_dict['x1_2'])
-        gjk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x2_1'], self.vars_dict['x1_2'])
-        gkk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x1_1'], self.vars_dict['x2_2'])
-        glk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x2_1'], self.vars_dict['x2_2'])
+        combinations = self.create_var_combinations(self.n)
+        points = [(self.vars_dict[x], self.vars_dict[y], self.vars_dict[z]) for x, y, z in combinations]
+        f_value = [self.example_function_n3(points[i]) for i in range(len(points))]
+        minimum = min(f_value)
 
-        minimum = None
-        while sqrt(pow((self.vars_dict['b_0'] - self.vars_dict['a_0']), 2) + pow(
-                (self.vars_dict['b_1'] - self.vars_dict['a_1']), 2) + pow(
-            (self.vars_dict['b_2'] - self.vars_dict['a_2']), 2)) > self.epsilon:
+        while self.count_distance() > self.epsilon:
             self.iteration += 1
-            minimum = min([gek, ghk, gfk, ggk, gik, gjk, gkk, glk])
-            if minimum == gek:
-                self.vars_dict['b_0'] = self.vars_dict['x2_0']
-                self.vars_dict['b_1'] = self.vars_dict['x2_1']
-                self.vars_dict['b_2'] = self.vars_dict['x2_2']
-            elif minimum == gfk:
-                self.vars_dict['b_0'] = self.vars_dict['x2_0']
-                self.vars_dict['a_1'] = self.vars_dict['x1_1']
-                self.vars_dict['b_2'] = self.vars_dict['x2_2']
-            elif minimum == ggk:
-                self.vars_dict['b_0'] = self.vars_dict['x2_0']
-                self.vars_dict['b_1'] = self.vars_dict['x2_1']
-                self.vars_dict['a_2'] = self.vars_dict['x1_2']
-            elif minimum == ghk:
-                self.vars_dict['b_0'] = self.vars_dict['x2_0']
-                self.vars_dict['a_1'] = self.vars_dict['x1_1']
-                self.vars_dict['a_2'] = self.vars_dict['x1_2']
-            elif minimum == gik:
-                self.vars_dict['a_0'] = self.vars_dict['x1_0']
-                self.vars_dict['b_1'] = self.vars_dict['x2_1']
-                self.vars_dict['b_2'] = self.vars_dict['x2_2']
-            elif minimum == gjk:
-                self.vars_dict['a_0'] = self.vars_dict['x1_0']
-                self.vars_dict['a_1'] = self.vars_dict['x1_1']
-                self.vars_dict['b_2'] = self.vars_dict['x2_2']
-            elif minimum == gkk:
-                self.vars_dict['a_0'] = self.vars_dict['x1_0']
-                self.vars_dict['b_1'] = self.vars_dict['x2_1']
-                self.vars_dict['a_2'] = self.vars_dict['x1_2']
-            elif minimum == glk:
-                self.vars_dict['a_0'] = self.vars_dict['x1_0']
-                self.vars_dict['a_1'] = self.vars_dict['x1_1']
-                self.vars_dict['a_2'] = self.vars_dict['x1_2']
+            self.calculate_a_b_value(f_value, minimum, combinations)
+            self.calculate_x1_x2_value()
 
-            self.vars_dict['x1_0'] = self.vars_dict['a_0'] + (1 - self.k) * (
-                    self.vars_dict['b_0'] - self.vars_dict['a_0'])
-            self.vars_dict['x2_0'] = self.vars_dict['a_0'] + self.k * (self.vars_dict['b_0'] - self.vars_dict['a_0'])
-            self.vars_dict['x1_1'] = self.vars_dict['a_1'] + (1 - self.k) * (
-                    self.vars_dict['b_1'] - self.vars_dict['a_1'])
-            self.vars_dict['x2_1'] = self.vars_dict['a_1'] + self.k * (self.vars_dict['b_1'] - self.vars_dict['a_1'])
-            self.vars_dict['x1_2'] = self.vars_dict['a_2'] + (1 - self.k) * (
-                    self.vars_dict['b_2'] - self.vars_dict['a_2'])
-            self.vars_dict['x2_2'] = self.vars_dict['a_2'] + self.k * (self.vars_dict['b_2'] - self.vars_dict['a_2'])
+            points = [(self.vars_dict[x], self.vars_dict[y], self.vars_dict[z]) for x, y, z in combinations]
+            f_value = [self.example_function_n3(points[i]) for i in range(len(points))]
+            minimum = min(f_value)
 
-            gek = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x1_1'], self.vars_dict['x1_2'])
-            gfk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x2_1'], self.vars_dict['x1_2'])
-            ggk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x1_1'], self.vars_dict['x2_2'])
-            ghk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x2_1'], self.vars_dict['x2_2'])
-            gik = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x1_1'], self.vars_dict['x1_2'])
-            gjk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x2_1'], self.vars_dict['x1_2'])
-            gkk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x1_1'], self.vars_dict['x2_2'])
-            glk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x2_1'], self.vars_dict['x2_2'])
-            minimum = min([gek, ghk, gfk, ggk, gik, gjk, gkk, glk])
+        self.print_algorithm_result(f_value, minimum, points)
 
-        x1 = self.vars_dict['x1_0']
-        x2 = self.vars_dict['x2_0']
-        y1 = self.vars_dict['x1_1']
-        y2 = self.vars_dict['x2_1']
-        z1 = self.vars_dict['x1_2']
-        z2 = self.vars_dict['x2_2']
+    def calculate_a_b_value(self, f_value, minimum, combinations):
+        point = combinations[f_value.index(minimum)]
+        change_dict = {
+            'x1_': ['b_', 'x2_'],
+            'x2_': ['a_', 'x1_']
+        }
 
-        if minimum == gek:
-            print(f'Minimum at the point: ({x1}, {y1}, {z1})')
-        elif minimum == gfk:
-            print(f'Minimum at the point: ({x1}, {y2}, {z1})')
-        elif minimum == ggk:
-            print(f'Minimum at the point: ({x1}, {y1}, {z2})')
-        elif minimum == ghk:
-            print(f'Minimum at the point: ({x1}, {y2}, {z2})')
-        elif minimum == gik:
-            print(f'Minimum at the point: ({x2}, {y1}, {z1})')
-        elif minimum == gjk:
-            print(f'Minimum at the point: ({x2}, {y2}, {z1})')
-        elif minimum == gkk:
-            print(f'Minimum at the point: ({x2}, {y1}, {z2})')
-        elif minimum == glk:
-            print(f'Minimum at the point: ({x2}, {y2}, {z2})')
+        for i in range(self.n):
+            change_var = change_dict[point[i][:3]]
+            self.vars_dict[change_var[0] + str(i)] = self.vars_dict[change_var[1] + str(i)]
 
+    def print_algorithm_result(self, f_value, minimum, points):
+        print(f'Minimum at the point: {points[f_value.index(minimum)]}')
         print(f'Minimum value: {minimum}')
         print(f'Number of iterations: {self.iteration}')
 
+    def count_distance(self):
+        distances = [pow(self.vars_dict[f'b_{i}'] - self.vars_dict[f'a_{i}'], 2) for i in range(self.n)]
+        return sqrt(sum(distances))
+
+    def calculate_x1_x2_value(self):
+        for i in range(self.n):
+            self.vars_dict[f'x1_{i}'] = self.vars_dict[f'a_{i}'] + (1 - self.k) * (
+                    self.vars_dict[f'b_{i}'] - self.vars_dict[f'a_{i}'])
+            self.vars_dict[f'x2_{i}'] = self.vars_dict[f'a_{i}'] + self.k * (
+                    self.vars_dict[f'b_{i}'] - self.vars_dict[f'a_{i}'])
+
     @staticmethod
-    def example_function_n1(x):
+    def example_function_n1(variables):
         """Function has got minimum at x = 0.5."""
-        return pow(x - 0.5, 2) + 0.5
+        return pow(variables - 0.5, 2) + 0.5
 
     @staticmethod
-    def example_function_n2(x, y):
+    def example_function_n2(variables):
         """Function has got minimum at x = 0.5 and y = 0.5."""
-        return pow(x - 0.5, 4) + pow(y - 0.5, 4) + 2 * pow(x - 0.5, 2) + 2 * pow(y - 0.5, 2) + 4 * (x - 0.5) * (y - 0.5)
+        return pow(variables[0] - 0.5, 4) + pow(variables[1] - 0.5, 4) + 2 * pow(variables[0] - 0.5, 2) + 2 * pow(
+            variables[1] - 0.5, 2) + 4 * (variables[0] - 0.5) * (variables[1] - 0.5)
 
     @staticmethod
-    def example_function_n3(x, y, z):
+    def example_function_n3(variables):
         """Function has got minimum at (0, 0, 0)."""
-        return pow(x, 2) + pow(y, 2) + pow(z, 2)
+        return pow(variables[0], 2) + pow(variables[1], 2) + pow(variables[2], 2)
 
     @staticmethod
     def create_var_combinations(n):
@@ -232,8 +143,7 @@ class Algorithm:
 
 
 if __name__ == '__main__':
-    alg = Algorithm([0, 0, 0], [1, 1, 1], 3)
+    alg = Algorithm([0, 0, 0], [1, 1, 1], 2)
     # alg.find_minimum_value_n1()
     # alg.find_minimum_value_n2()
-    # alg.find_minimum_value_n3()
-    alg.create_var_combinations(3)
+    alg.find_minimum_value_n3()
