@@ -1,12 +1,14 @@
 from math import *
 
+from src import utils
 from src.values import Number, Letter
 
 
 class Interpreter:
     def visit(self, node):
         """The function will process the tree and return a number / character"""
-        method_name = f'visit_{type(node).__name__}'
+        name = utils.camel_to_snake_case(type(node).__name__)
+        method_name = f'visit_{name}'
         method = getattr(self, method_name)
         return method(node)
 
