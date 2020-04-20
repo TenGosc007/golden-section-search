@@ -102,6 +102,102 @@ class Algorithm:
         print(f'Minimum value: {minimum}')
         print(f'Number of iterations: {self.iteration}')
 
+    def find_minimum_value_n3(self):
+        gek = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x1_1'], self.vars_dict['x1_2'])
+        gfk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x2_1'], self.vars_dict['x1_2'])
+        ggk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x1_1'], self.vars_dict['x2_2'])
+        ghk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x2_1'], self.vars_dict['x2_2'])
+        gik = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x1_1'], self.vars_dict['x1_2'])
+        gjk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x2_1'], self.vars_dict['x1_2'])
+        gkk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x1_1'], self.vars_dict['x2_2'])
+        glk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x2_1'], self.vars_dict['x2_2'])
+
+        minimum = None
+        while sqrt(pow((self.vars_dict['b_0'] - self.vars_dict['a_0']), 2) + pow(
+                (self.vars_dict['b_1'] - self.vars_dict['a_1']), 2) + pow(
+            (self.vars_dict['b_2'] - self.vars_dict['a_2']), 2)) > self.epsilon:
+            self.iteration += 1
+            minimum = min([gek, ghk, gfk, ggk, gik, gjk, gkk, glk])
+            if minimum == gek:
+                self.vars_dict['b_0'] = self.vars_dict['x2_0']
+                self.vars_dict['b_1'] = self.vars_dict['x2_1']
+                self.vars_dict['b_2'] = self.vars_dict['x2_2']
+            elif minimum == gfk:
+                self.vars_dict['b_0'] = self.vars_dict['x2_0']
+                self.vars_dict['a_1'] = self.vars_dict['x1_1']
+                self.vars_dict['b_2'] = self.vars_dict['x2_2']
+            elif minimum == ggk:
+                self.vars_dict['b_0'] = self.vars_dict['x2_0']
+                self.vars_dict['b_1'] = self.vars_dict['x2_1']
+                self.vars_dict['a_2'] = self.vars_dict['x1_2']
+            elif minimum == ghk:
+                self.vars_dict['b_0'] = self.vars_dict['x2_0']
+                self.vars_dict['a_1'] = self.vars_dict['x1_1']
+                self.vars_dict['a_2'] = self.vars_dict['x1_2']
+            elif minimum == gik:
+                self.vars_dict['a_0'] = self.vars_dict['x1_0']
+                self.vars_dict['b_1'] = self.vars_dict['x2_1']
+                self.vars_dict['b_2'] = self.vars_dict['x2_2']
+            elif minimum == gjk:
+                self.vars_dict['a_0'] = self.vars_dict['x1_0']
+                self.vars_dict['a_1'] = self.vars_dict['x1_1']
+                self.vars_dict['b_2'] = self.vars_dict['x2_2']
+            elif minimum == gkk:
+                self.vars_dict['a_0'] = self.vars_dict['x1_0']
+                self.vars_dict['b_1'] = self.vars_dict['x2_1']
+                self.vars_dict['a_2'] = self.vars_dict['x1_2']
+            elif minimum == glk:
+                self.vars_dict['a_0'] = self.vars_dict['x1_0']
+                self.vars_dict['a_1'] = self.vars_dict['x1_1']
+                self.vars_dict['a_2'] = self.vars_dict['x1_2']
+
+            self.vars_dict['x1_0'] = self.vars_dict['a_0'] + (1 - self.k) * (
+                    self.vars_dict['b_0'] - self.vars_dict['a_0'])
+            self.vars_dict['x2_0'] = self.vars_dict['a_0'] + self.k * (self.vars_dict['b_0'] - self.vars_dict['a_0'])
+            self.vars_dict['x1_1'] = self.vars_dict['a_1'] + (1 - self.k) * (
+                    self.vars_dict['b_1'] - self.vars_dict['a_1'])
+            self.vars_dict['x2_1'] = self.vars_dict['a_1'] + self.k * (self.vars_dict['b_1'] - self.vars_dict['a_1'])
+            self.vars_dict['x1_2'] = self.vars_dict['a_2'] + (1 - self.k) * (
+                    self.vars_dict['b_2'] - self.vars_dict['a_2'])
+            self.vars_dict['x2_2'] = self.vars_dict['a_2'] + self.k * (self.vars_dict['b_2'] - self.vars_dict['a_2'])
+
+            gek = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x1_1'], self.vars_dict['x1_2'])
+            gfk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x2_1'], self.vars_dict['x1_2'])
+            ggk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x1_1'], self.vars_dict['x2_2'])
+            ghk = self.example_function_n3(self.vars_dict['x1_0'], self.vars_dict['x2_1'], self.vars_dict['x2_2'])
+            gik = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x1_1'], self.vars_dict['x1_2'])
+            gjk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x2_1'], self.vars_dict['x1_2'])
+            gkk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x1_1'], self.vars_dict['x2_2'])
+            glk = self.example_function_n3(self.vars_dict['x2_0'], self.vars_dict['x2_1'], self.vars_dict['x2_2'])
+            minimum = min([gek, ghk, gfk, ggk, gik, gjk, gkk, glk])
+
+        x1 = self.vars_dict['x1_0']
+        x2 = self.vars_dict['x2_0']
+        y1 = self.vars_dict['x1_1']
+        y2 = self.vars_dict['x2_1']
+        z1 = self.vars_dict['x1_2']
+        z2 = self.vars_dict['x2_2']
+
+        if minimum == gek:
+            print(f'Minimum at the point: ({x1}, {y1}, {z1})')
+        elif minimum == gfk:
+            print(f'Minimum at the point: ({x1}, {y2}, {z1})')
+        elif minimum == ggk:
+            print(f'Minimum at the point: ({x1}, {y1}, {z2})')
+        elif minimum == ghk:
+            print(f'Minimum at the point: ({x1}, {y2}, {z2})')
+        elif minimum == gik:
+            print(f'Minimum at the point: ({x2}, {y1}, {z1})')
+        elif minimum == gjk:
+            print(f'Minimum at the point: ({x2}, {y2}, {z1})')
+        elif minimum == gkk:
+            print(f'Minimum at the point: ({x2}, {y1}, {z2})')
+        elif minimum == glk:
+            print(f'Minimum at the point: ({x2}, {y2}, {z2})')
+
+        print(f'Minimum value: {minimum}')
+        print(f'Number of iterations: {self.iteration}')
+
     @staticmethod
     def example_function_n1(x):
         """Function has got minimum at x = 0.5."""
@@ -112,8 +208,14 @@ class Algorithm:
         """Function has got minimum at x = 0.5 and y = 0.5."""
         return pow(x - 0.5, 4) + pow(y - 0.5, 4) + 2 * pow(x - 0.5, 2) + 2 * pow(y - 0.5, 2) + 4 * (x - 0.5) * (y - 0.5)
 
+    @staticmethod
+    def example_function_n3(x, y, z):
+        """Function has got minimum at (0, 0, 0)."""
+        return pow(x, 2) + pow(y, 2) + pow(z, 2)
+
 
 if __name__ == '__main__':
-    alg = Algorithm([0, 0], [1, 1], 2)
+    alg = Algorithm([0, 0, 0], [1, 1, 1], 3)
     # alg.find_minimum_value_n1()
-    alg.find_minimum_value_n2()
+    # alg.find_minimum_value_n2()
+    alg.find_minimum_value_n3()
