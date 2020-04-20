@@ -213,9 +213,27 @@ class Algorithm:
         """Function has got minimum at (0, 0, 0)."""
         return pow(x, 2) + pow(y, 2) + pow(z, 2)
 
+    @staticmethod
+    def create_var_combinations(n):
+        var_list = [
+            ['x1_0', 'x2_0'],
+            ['x1_1', 'x2_1'],
+            ['x1_2', 'x2_2'],
+            ['x1_3', 'x2_3'],
+            ['x1_4', 'x2_4']
+        ]
+
+        pools = [tuple(pool) for pool in var_list[:n]]
+        result = [[]]
+        for pool in pools:
+            result = [x + [y] for x in result for y in pool]
+
+        return result
+
 
 if __name__ == '__main__':
     alg = Algorithm([0, 0, 0], [1, 1, 1], 3)
     # alg.find_minimum_value_n1()
     # alg.find_minimum_value_n2()
-    alg.find_minimum_value_n3()
+    # alg.find_minimum_value_n3()
+    alg.create_var_combinations(3)
