@@ -57,7 +57,7 @@ class Parser:
 
         return result
 
-    def expon(self):  
+    def expon(self):
         """Exponentiation - power function, lower hierarchy level."""
         result = self.factor()
 

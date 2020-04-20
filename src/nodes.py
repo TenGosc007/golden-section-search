@@ -1,6 +1,8 @@
 from dataclasses import dataclass
 
 """Functions returns ordered expression."""
+
+
 @dataclass
 class NumberNode:
     value: float
@@ -15,6 +17,7 @@ class LetterNode:
 
     def __repr__(self):
         return f"{self.value}"
+
 
 @dataclass
 class AddNode:
