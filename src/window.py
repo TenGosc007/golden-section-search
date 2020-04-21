@@ -1,7 +1,9 @@
 from PyQt5 import QtCore
 from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QComboBox, QLineEdit, QTextBrowser, QMessageBox
 
+from src.algorithm import Algorithm
 from src.config import Config
+from src.utils import example_function_n5
 
 
 class Window(QMainWindow):
@@ -20,7 +22,7 @@ class Window(QMainWindow):
         self.func_combo_box = self.create_combobox(20, 45, 500, 25, function_list)
 
         self.stop_criterion_label = self.create_label(20, 80, 'Kryterium stopu')
-        stop_criterion_list = ['dla x: ||x\u2099 - x\u2099 \u208B \u2081x|| \u2264 \u03B5',
+        stop_criterion_list = ['dla x: ||x\u2099 - x\u2099 \u208B \u2081|| \u2264 \u03B5',
                                'dla f(x): |f(x\u2099) - f(x\u2099 \u208B \u2081)| \u2264 \u03B5',
                                'Liczba iteracji']
         self.stop_criterion_combo_box = self.create_combobox(20, 105, 400, 25, stop_criterion_list, editable=False)
@@ -61,7 +63,7 @@ class Window(QMainWindow):
 
         self.prompter = self.create_prompter(20, Config.APP_HEIGHT - 320, 500, 300)
 
-        self.func_button = self.create_button(170, 355, 200, 25, 'Wyświetl', self.print_on_prompter, auto_size=False)
+        self.func_button = self.create_button(170, 355, 200, 25, 'Start', self.run_algorithm, auto_size=False)
 
     def create_label(self, x, y, text):
         """Function creates label on the app window."""
@@ -125,15 +127,15 @@ class Window(QMainWindow):
         else:
             self.iteration_input.setEnabled(False)
 
-    def print_on_prompter(self):
+    def run_algorithm(self):
         """Function changes text to function in combo_box"""
         function = str(self.func_combo_box.currentText())
         stop_criterion = str(self.stop_criterion_combo_box.currentText())
-        x1a, x1b = str(self.x1_a_input.text()), str(self.x1_b_input.text())
-        x2a, x2b = str(self.x2_a_input.text()), str(self.x2_b_input.text())
-        x3a, x3b = str(self.x3_a_input.text()), str(self.x3_b_input.text())
-        x4a, x4b = str(self.x4_a_input.text()), str(self.x4_b_input.text())
-        x5a, x5b = str(self.x5_a_input.text()), str(self.x5_b_input.text())
+        x1a, x1b = int(self.x1_a_input.text()), int(self.x1_b_input.text())
+        x2a, x2b = int(self.x2_a_input.text()), int(self.x2_b_input.text())
+        x3a, x3b = int(self.x3_a_input.text()), int(self.x3_b_input.text())
+        x4a, x4b = int(self.x4_a_input.text()), int(self.x4_b_input.text())
+        x5a, x5b = int(self.x5_a_input.text()), int(self.x5_b_input.text())
 
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
@@ -141,12 +143,26 @@ class Window(QMainWindow):
         if not function or stop_criterion == 'Liczba iteracji L = ':
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
         else:
-            string = f'Funkcja wejściowa:\ny = {function}\n\n' \
-                     f'Kryterium stopu:\n{stop_criterion}\n\n' \
-                     f'Przedziały poszukiwań:\n' \
-                     f'Dla x1: a={x1a}, b={x1b}\n' \
-                     f'Dla x2: a={x2a}, b={x2b}\n' \
-                     f'Dla x3: a={x3a}, b={x3b}\n' \
-                     f'Dla x4: a={x4a}, b={x4b}\n' \
-                     f'Dla x5: a={x5a}, b={x5b}'
-            self.prompter.setText(string)
+
+            input_info = f'------------------------ Dane wejściowe ------------------------\n\n' \
+                         f'Funkcja wejściowa:\ny = {function}\n\n' \
+                         f'Kryterium stopu:\n{stop_criterion}\n\n' \
+                         f'Przedziały poszukiwań:\n' \
+                         f'Dla x1: a={x1a}, b={x1b}\n' \
+                         f'Dla x2: a={x2a}, b={x2b}\n' \
+                         f'Dla x3: a={x3a}, b={x3b}\n' \
+                         f'Dla x4: a={x4a}, b={x4b}\n' \
+                         f'Dla x5: a={x5a}, b={x5b}\n'
+
+            self.prompter.append(input_info)
+
+            # TODO: function parser which returns n and function value evaluator
+            # temporary
+            function_evaluator = example_function_n5
+            n = 5
+            # a = [x1a, x2a, x3a, x4a, x5a]
+            # b = [x1b, x2b, x3b, x4b, x5b]
+            a = [0, 0, 0, 0, 0]  # temporary constant
+            b = [1, 1, 1, 1, 1]
+            algorithm = Algorithm(a, b, n, function_evaluator, self.prompter)
+            algorithm.find_minimum_value()

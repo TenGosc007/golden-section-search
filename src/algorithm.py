@@ -1,15 +1,14 @@
 from math import sqrt
 
-from src.utils import example_function_n5
-
 
 class Algorithm:
-    def __init__(self, a, b, n, function):
+    def __init__(self, a, b, n, function, logger):
         self.epsilon = 0.001
         self.k = (sqrt(5) - 1) / 2
         self.n = n
         self.vars_dict = self.get_vars_dict(a, b, self.n)
         self.function = function
+        self.logger = logger
         self.iteration = 0
 
     def get_vars_dict(self, a, b, n):
@@ -25,6 +24,7 @@ class Algorithm:
 
     def find_minimum_value(self):
         """Function prints minimum value for math function."""
+        self.logger.append('------------------------ Działanie algorytmu ------------------------')
         combinations = self.create_var_combinations()
         points = [self.get_points(var_list) for var_list in combinations]
         f_value = [self.function(points[i]) if self.n > 1 else self.function(points[i][0]) for i in
@@ -40,7 +40,9 @@ class Algorithm:
             f_value = [self.function(points[i]) if self.n > 1 else self.function(points[i][0]) for i in
                        range(len(points))]
             minimum = min(f_value)
+            self.print_algorithm_result(f_value, minimum, points)
 
+        self.logger.append('\n------------------------ Wyniki ------------------------')
         self.print_algorithm_result(f_value, minimum, points)
 
     def create_var_combinations(self):
@@ -82,11 +84,7 @@ class Algorithm:
 
     def print_algorithm_result(self, f_value, minimum, points):
         """Function prints algorithm results."""
-        print(f'Minimum at the point: {points[f_value.index(minimum)]}')
-        print(f'Minimum value: {minimum}')
-        print(f'Number of iterations: {self.iteration}')
-
-
-if __name__ == '__main__':
-    alg = Algorithm([0, 0, 0, 0, 0], [1, 1, 1, 1, 1], 5, example_function_n5)
-    alg.find_minimum_value()
+        self.logger.append(f'\nNumer iteracji: {self.iteration}\n\n'
+                           f'Minimum znajduje się w punktcie:\n{points[f_value.index(minimum)]}\n\n'
+                           f'Minimalna wartość: {minimum}\n\n'
+                           f'------------------------------------------------------------')
