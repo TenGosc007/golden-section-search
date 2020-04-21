@@ -1,15 +1,19 @@
 from math import sqrt
 
+from src.utils import example_function_n5
+
 
 class Algorithm:
-    def __init__(self, a, b, n):
+    def __init__(self, a, b, n, function):
         self.epsilon = 0.001
         self.k = (sqrt(5) - 1) / 2
         self.n = n
         self.vars_dict = self.get_vars_dict(a, b, self.n)
+        self.function = function
         self.iteration = 0
 
     def get_vars_dict(self, a, b, n):
+        """Function initialises vars for algorithm."""
         vars_dict = {}
         for i in range(n):
             vars_dict[f'a_{i}'] = a[i]
@@ -19,10 +23,12 @@ class Algorithm:
 
         return vars_dict
 
-    def find_minimum_value_n1(self):
-        combinations = self.create_var_combinations(self.n)
-        points = [self.vars_dict[x[0]] for x in combinations]
-        f_value = [self.example_function_n1(points[i]) for i in range(len(points))]
+    def find_minimum_value(self):
+        """Function prints minimum value for math function."""
+        combinations = self.create_var_combinations()
+        points = [self.get_points(var_list) for var_list in combinations]
+        f_value = [self.function(points[i]) if self.n > 1 else self.function(points[i][0]) for i in
+                   range(len(points))]
         minimum = min(f_value)
 
         while self.count_distance() > self.epsilon:
@@ -30,160 +36,57 @@ class Algorithm:
             self.calculate_a_b_value(f_value, minimum, combinations)
             self.calculate_x1_x2_value()
 
-            points = [self.vars_dict[x[0]] for x in combinations]
-            f_value = [self.example_function_n1(points[i]) for i in range(len(points))]
+            points = [self.get_points(var_list) for var_list in combinations]
+            f_value = [self.function(points[i]) if self.n > 1 else self.function(points[i][0]) for i in
+                       range(len(points))]
             minimum = min(f_value)
 
         self.print_algorithm_result(f_value, minimum, points)
 
-    def find_minimum_value_n2(self):
-        combinations = self.create_var_combinations(self.n)
-        points = [(self.vars_dict[x], self.vars_dict[y]) for x, y in combinations]
-        f_value = [self.example_function_n2(points[i]) for i in range(len(points))]
-        minimum = min(f_value)
+    def create_var_combinations(self):
+        """Function creates 2^n combinations of available variables."""
+        vars_list = [[f'x1_{i}', f'x2_{i}'] for i in range(self.n)]
+        pools = [tuple(pool) for pool in vars_list]
+        result = [[]]
+        for pool in pools:
+            result = [x + [y] for x in result for y in pool]
+        return result
 
-        while self.count_distance() > self.epsilon:
-            self.iteration += 1
-            self.calculate_a_b_value(f_value, minimum, combinations)
-            self.calculate_x1_x2_value()
+    def get_points(self, var_list):
+        """Function gets points for list of variables."""
+        return [self.vars_dict[i] for i in var_list]
 
-            points = [(self.vars_dict[x], self.vars_dict[y]) for x, y in combinations]
-            f_value = [self.example_function_n2(points[i]) for i in range(len(points))]
-            minimum = min(f_value)
-
-        self.print_algorithm_result(f_value, minimum, points)
-
-    def find_minimum_value_n3(self):
-        combinations = self.create_var_combinations(self.n)
-        points = [(self.vars_dict[x], self.vars_dict[y], self.vars_dict[z]) for x, y, z in combinations]
-        f_value = [self.example_function_n3(points[i]) for i in range(len(points))]
-        minimum = min(f_value)
-
-        while self.count_distance() > self.epsilon:
-            self.iteration += 1
-            self.calculate_a_b_value(f_value, minimum, combinations)
-            self.calculate_x1_x2_value()
-
-            points = [(self.vars_dict[x], self.vars_dict[y], self.vars_dict[z]) for x, y, z in combinations]
-            f_value = [self.example_function_n3(points[i]) for i in range(len(points))]
-            minimum = min(f_value)
-
-        self.print_algorithm_result(f_value, minimum, points)
-
-    def find_minimum_value_n4(self):
-        combinations = self.create_var_combinations(self.n)
-        points = [(self.vars_dict[x], self.vars_dict[y], self.vars_dict[z], self.vars_dict[s]) for x, y, z, s in
-                  combinations]
-        f_value = [self.example_function_n4(points[i]) for i in range(len(points))]
-        minimum = min(f_value)
-
-        while self.count_distance() > self.epsilon:
-            self.iteration += 1
-            self.calculate_a_b_value(f_value, minimum, combinations)
-            self.calculate_x1_x2_value()
-
-            points = [(self.vars_dict[x], self.vars_dict[y], self.vars_dict[z], self.vars_dict[s]) for x, y, z, s in
-                      combinations]
-            f_value = [self.example_function_n3(points[i]) for i in range(len(points))]
-            minimum = min(f_value)
-
-        self.print_algorithm_result(f_value, minimum, points)
-
-    def find_minimum_value_n5(self):
-        combinations = self.create_var_combinations(self.n)
-        points = [(self.vars_dict[x], self.vars_dict[y], self.vars_dict[z], self.vars_dict[s], self.vars_dict[k]) for
-                  x, y, z, s, k in combinations]
-        f_value = [self.example_function_n5(points[i]) for i in range(len(points))]
-        minimum = min(f_value)
-
-        while self.count_distance() > self.epsilon:
-            self.iteration += 1
-            self.calculate_a_b_value(f_value, minimum, combinations)
-            self.calculate_x1_x2_value()
-
-            points = [(self.vars_dict[x], self.vars_dict[y], self.vars_dict[z], self.vars_dict[s], self.vars_dict[k])
-                      for x, y, z, s, k in combinations]
-            f_value = [self.example_function_n5(points[i]) for i in range(len(points))]
-            minimum = min(f_value)
-
-        self.print_algorithm_result(f_value, minimum, points)
+    def count_distance(self):
+        """Function returns value of Euclidean metric for algorithm points."""
+        distances = [pow(self.vars_dict[f'b_{i}'] - self.vars_dict[f'a_{i}'], 2) for i in range(self.n)]
+        return sqrt(sum(distances))
 
     def calculate_a_b_value(self, f_value, minimum, combinations):
+        """Function calculates a and b value based on points x1 and x2."""
         point = combinations[f_value.index(minimum)]
         change_dict = {
             'x1_': ['b_', 'x2_'],
             'x2_': ['a_', 'x1_']
         }
-
         for i in range(self.n):
             change_var = change_dict[point[i][:3]]
             self.vars_dict[change_var[0] + str(i)] = self.vars_dict[change_var[1] + str(i)]
 
-    def print_algorithm_result(self, f_value, minimum, points):
-        print(f'Minimum at the point: {points[f_value.index(minimum)]}')
-        print(f'Minimum value: {minimum}')
-        print(f'Number of iterations: {self.iteration}')
-
-    def count_distance(self):
-        distances = [pow(self.vars_dict[f'b_{i}'] - self.vars_dict[f'a_{i}'], 2) for i in range(self.n)]
-        return sqrt(sum(distances))
-
     def calculate_x1_x2_value(self):
+        """Function calculates x1 and x2 value for algorithm."""
         for i in range(self.n):
             self.vars_dict[f'x1_{i}'] = self.vars_dict[f'a_{i}'] + (1 - self.k) * (
                     self.vars_dict[f'b_{i}'] - self.vars_dict[f'a_{i}'])
             self.vars_dict[f'x2_{i}'] = self.vars_dict[f'a_{i}'] + self.k * (
                     self.vars_dict[f'b_{i}'] - self.vars_dict[f'a_{i}'])
 
-    @staticmethod
-    def example_function_n1(variables):
-        """Function has got minimum at x = 0.5."""
-        return pow(variables - 0.5, 2) + 0.5
-
-    @staticmethod
-    def example_function_n2(variables):
-        """Function has got minimum at x = 0.5 and y = 0.5."""
-        return pow(variables[0] - 0.5, 4) + pow(variables[1] - 0.5, 4) + 2 * pow(variables[0] - 0.5, 2) + 2 * pow(
-            variables[1] - 0.5, 2) + 4 * (variables[0] - 0.5) * (variables[1] - 0.5)
-
-    @staticmethod
-    def example_function_n3(variables):
-        """Function has got minimum at (0, 0, 0)."""
-        return pow(variables[0], 2) + pow(variables[1], 2) + pow(variables[2], 2)
-
-    @staticmethod
-    def example_function_n4(variables):
-        """Function has got minimum at (0, 0, 0, 0)."""
-        return pow(variables[0], 2) + pow(variables[1], 2) + pow(variables[2], 2) + pow(variables[3], 2)
-
-    @staticmethod
-    def example_function_n5(variables):
-        """Function has got minimum at (0, 0, 0, 0, 0)."""
-        return pow(variables[0], 2) + pow(variables[1], 2) + pow(variables[2], 2) + pow(variables[3], 2) + pow(
-            variables[4], 2)
-
-    @staticmethod
-    def create_var_combinations(n):
-        var_list = [
-            ['x1_0', 'x2_0'],
-            ['x1_1', 'x2_1'],
-            ['x1_2', 'x2_2'],
-            ['x1_3', 'x2_3'],
-            ['x1_4', 'x2_4']
-        ]
-
-        pools = [tuple(pool) for pool in var_list[:n]]
-        result = [[]]
-        for pool in pools:
-            result = [x + [y] for x in result for y in pool]
-
-        return result
+    def print_algorithm_result(self, f_value, minimum, points):
+        """Function prints algorithm results."""
+        print(f'Minimum at the point: {points[f_value.index(minimum)]}')
+        print(f'Minimum value: {minimum}')
+        print(f'Number of iterations: {self.iteration}')
 
 
 if __name__ == '__main__':
-    alg = Algorithm([0, 0, 0, 0, 0], [1, 1, 1, 1, 1], 5)
-    # alg.find_minimum_value_n1()
-    # alg.find_minimum_value_n2()
-    # alg.find_minimum_value_n3()
-    # alg.find_minimum_value_n4()
-    alg.find_minimum_value_n5()
+    alg = Algorithm([0, 0, 0, 0, 0], [1, 1, 1, 1, 1], 5, example_function_n5)
+    alg.find_minimum_value()
