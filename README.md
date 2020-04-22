@@ -7,6 +7,20 @@ Metoda minimalizacji funkcji nieliniowej ciągłej w kierunku (metoda złotego p
 ## TODO
 Wszystkie taski dotyczące projektu można znaleźć w zakładce [Projects](https://github.com/damianschmidt/golden-section-search/projects/1?add_cards_query=is%3Aopen).
 
+### Uwagi prowadzącej
+Parametry wejściowe:
+ - funkcja wejściowa
+ - punkt startowy
+ - kierunek
+ - długość przedziału τ
+ - dokładność ε
+ 
+Koniec przedziału: x<sub>b</sub> = x<sub>0</sub> + τ * kierunek
+ 
+Funkcja jest z założenia funkcją monoticzną, dlatego jeśli nie jest (bo nie ma w założeniach) to może wpaść w minimum lokalne.
+
+Kierunek jest wektorem(?) na przykład [1, 2].
+
 ## Praca z projektem
 Aby uruchomić aplikację po sklonowaniu repozytorium, należy zainstalować wymagane paczki.
 
