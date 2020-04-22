@@ -21,6 +21,8 @@ Funkcja jest z założenia funkcją monoticzną, dlatego jeśli nie jest (bo nie
 
 Kierunek jest wektorem(?) na przykład [1, 2].
 
+Narysować warstwice dla n = 2 i zaznaczyć ostateczny punkt optymalny.
+
 ## Praca z projektem
 Aby uruchomić aplikację po sklonowaniu repozytorium, należy zainstalować wymagane paczki.
 
