@@ -2,10 +2,12 @@ from math import sqrt
 
 
 class Algorithm:
-    def __init__(self, a, b, n, function, logger):
-        self.epsilon = 0.001
+    def __init__(self, a, b, n, tau, epsilon, stop, function, logger):
+        self.epsilon = epsilon
         self.k = (sqrt(5) - 1) / 2
         self.n = n
+        self.tau = tau  # TODO: Change length of ranges
+        self.stop = stop  # TODO: Add usage for different stop criterion
         self.vars_dict = self.get_vars_dict(a, b, self.n)
         self.function = function
         self.logger = logger
@@ -31,6 +33,7 @@ class Algorithm:
                    range(len(points))]
         minimum = min(f_value)
 
+        # TODO: Add different stop condition
         while self.count_distance() > self.epsilon:
             self.iteration += 1
             self.calculate_a_b_value(f_value, minimum, combinations)

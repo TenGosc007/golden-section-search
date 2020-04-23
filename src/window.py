@@ -14,6 +14,7 @@ class Window(QMainWindow):
         self.setGeometry(self.config.X_POS, self.config.Y_POS, self.config.APP_WIDTH, self.config.APP_HEIGHT)
         self.setWindowTitle('Golden Section Search')
         self.init_ui()
+        self.init_chart_field()
 
     def init_ui(self):
         """Function initializes user interface."""
@@ -32,38 +33,49 @@ class Window(QMainWindow):
         self.search_range_label = self.create_label(20, 140, 'Przedziały poszukiwań')
 
         self.x1_label = self.create_label(20, 165, 'Dla x1:')
-        self.x1_a_label = self.create_label(100, 165, 'a = ')
+        self.x1_a_label = self.create_label(100, 165, 'x\u2080 = ')
         self.x1_a_input = self.create_input(130, 165, 100, 25)
-        self.x1_b_label = self.create_label(250, 165, 'b = ')
+        self.x1_b_label = self.create_label(250, 165, 'd = ')
         self.x1_b_input = self.create_input(280, 165, 100, 25)
 
         self.x2_label = self.create_label(20, 200, 'Dla x2:')
-        self.x2_a_label = self.create_label(100, 200, 'a = ')
+        self.x2_a_label = self.create_label(100, 200, 'x\u2080 = ')
         self.x2_a_input = self.create_input(130, 200, 100, 25)
-        self.x2_b_label = self.create_label(250, 200, 'b = ')
+        self.x2_b_label = self.create_label(250, 200, 'd = ')
         self.x2_b_input = self.create_input(280, 200, 100, 25)
 
         self.x3_label = self.create_label(20, 235, 'Dla x3:')
-        self.x3_a_label = self.create_label(100, 235, 'a = ')
+        self.x3_a_label = self.create_label(100, 235, 'x\u2080 = ')
         self.x3_a_input = self.create_input(130, 235, 100, 25)
-        self.x3_b_label = self.create_label(250, 235, 'b = ')
+        self.x3_b_label = self.create_label(250, 235, 'd = ')
         self.x3_b_input = self.create_input(280, 235, 100, 25)
 
         self.x4_label = self.create_label(20, 270, 'Dla x4:')
-        self.x4_a_label = self.create_label(100, 270, 'a = ')
+        self.x4_a_label = self.create_label(100, 270, 'x\u2080 = ')
         self.x4_a_input = self.create_input(130, 270, 100, 25)
-        self.x4_b_label = self.create_label(250, 270, 'b = ')
+        self.x4_b_label = self.create_label(250, 270, 'd = ')
         self.x4_b_input = self.create_input(280, 270, 100, 25)
 
         self.x5_label = self.create_label(20, 305, 'Dla x5:')
-        self.x5_a_label = self.create_label(100, 305, 'a = ')
+        self.x5_a_label = self.create_label(100, 305, 'x\u2080 = ')
         self.x5_a_input = self.create_input(130, 305, 100, 25)
-        self.x5_b_label = self.create_label(250, 305, 'b = ')
+        self.x5_b_label = self.create_label(250, 305, 'd = ')
         self.x5_b_input = self.create_input(280, 305, 100, 25)
 
-        self.prompter = self.create_prompter(20, Config.APP_HEIGHT - 320, 500, 300)
+        self.tau_label = self.create_label(100, 360, '\u03c4 = ')
+        self.tau_input = self.create_input(130, 360, 100, 25, text='1')
 
-        self.func_button = self.create_button(170, 355, 200, 25, 'Start', self.run_algorithm, auto_size=False)
+        self.epsilon_label = self.create_label(250, 360, '\u03b5 = ')
+        self.epsilon_input = self.create_input(280, 360, 100, 25, text='0.001')
+
+        self.prompter = self.create_prompter(20, Config.APP_HEIGHT - 250, 500, 230)
+
+        self.func_button = self.create_button(170, 405, 200, 25, 'Znajdź minimum', self.run_algorithm, auto_size=False)
+
+    # TODO: Add possible of plotting charts (embeded matplotlib)
+    def init_chart_field(self):
+        """Function initializes chart inputs and chart field."""
+        pass
 
     def create_label(self, x, y, text):
         """Function creates label on the app window."""
@@ -95,11 +107,13 @@ class Window(QMainWindow):
                 combo_box.addItem(item)
         return combo_box
 
-    def create_input(self, x, y, width, height, enabled=True):
+    def create_input(self, x, y, width, height, enabled=True, text=None):
         """Function creates input."""
         input_field = QLineEdit(self)
         input_field.setGeometry(QtCore.QRect(x, y, width, height))
         input_field.setEnabled(enabled)
+        if text:
+            input_field.setText(text)
         return input_field
 
     def create_prompter(self, x, y, width, height):
@@ -131,11 +145,13 @@ class Window(QMainWindow):
         """Function changes text to function in combo_box"""
         function = str(self.func_combo_box.currentText())
         stop_criterion = str(self.stop_criterion_combo_box.currentText())
-        x1a, x1b = int(self.x1_a_input.text()), int(self.x1_b_input.text())
-        x2a, x2b = int(self.x2_a_input.text()), int(self.x2_b_input.text())
-        x3a, x3b = int(self.x3_a_input.text()), int(self.x3_b_input.text())
-        x4a, x4b = int(self.x4_a_input.text()), int(self.x4_b_input.text())
-        x5a, x5b = int(self.x5_a_input.text()), int(self.x5_b_input.text())
+        x1a, x1b = float(self.x1_a_input.text()), float(self.x1_b_input.text())
+        x2a, x2b = float(self.x2_a_input.text()), float(self.x2_b_input.text())
+        x3a, x3b = float(self.x3_a_input.text()), float(self.x3_b_input.text())
+        x4a, x4b = float(self.x4_a_input.text()), float(self.x4_b_input.text())
+        x5a, x5b = float(self.x5_a_input.text()), float(self.x5_b_input.text())
+        tau = float(self.tau_input.text())
+        epsilon = float(self.epsilon_input.text())
 
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
@@ -148,11 +164,12 @@ class Window(QMainWindow):
                          f'Funkcja wejściowa:\ny = {function}\n\n' \
                          f'Kryterium stopu:\n{stop_criterion}\n\n' \
                          f'Przedziały poszukiwań:\n' \
-                         f'Dla x1: a={x1a}, b={x1b}\n' \
-                         f'Dla x2: a={x2a}, b={x2b}\n' \
-                         f'Dla x3: a={x3a}, b={x3b}\n' \
-                         f'Dla x4: a={x4a}, b={x4b}\n' \
-                         f'Dla x5: a={x5a}, b={x5b}\n'
+                         f'Dla x1: x\u2080={x1a}, d={x1b}\n' \
+                         f'Dla x2: x\u2080={x2a}, d={x2b}\n' \
+                         f'Dla x3: x\u2080={x3a}, d={x3b}\n' \
+                         f'Dla x4: x\u2080={x4a}, d={x4b}\n' \
+                         f'Dla x5: x\u2080={x5a}, d={x5b}\n\n' \
+                         f'\u03c4={tau}\n\u03b5={epsilon}\n'
 
             self.prompter.append(input_info)
 
@@ -162,7 +179,8 @@ class Window(QMainWindow):
             n = 5
             # a = [x1a, x2a, x3a, x4a, x5a]
             # b = [x1b, x2b, x3b, x4b, x5b]
-            a = [0, 0, 0, 0, 0]  # temporary constant
-            b = [1, 1, 1, 1, 1]
-            algorithm = Algorithm(a, b, n, function_evaluator, self.prompter)
+            x0 = [0, 0, 0, 0, 0]  # temporary constant
+            d = [1, 1, 1, 1, 1]
+            stop = None  # temporary
+            algorithm = Algorithm(x0, d, n, tau, epsilon, stop, function_evaluator, self.prompter)
             algorithm.find_minimum_value()
