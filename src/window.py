@@ -1,8 +1,10 @@
 from PyQt5 import QtCore
-from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QComboBox, QLineEdit, QTextBrowser, QMessageBox
+from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QComboBox, QLineEdit, QTextBrowser, QMessageBox, QWidget, \
+    QGridLayout
 
 from src.algorithm import Algorithm
 from src.config import Config
+from src.plot_field import PlotField
 from src.utils import example_function_n5
 
 
@@ -13,113 +15,177 @@ class Window(QMainWindow):
         self.setObjectName('window')
         self.setGeometry(self.config.X_POS, self.config.Y_POS, self.config.APP_WIDTH, self.config.APP_HEIGHT)
         self.setWindowTitle('Golden Section Search')
+        self.grid_cols = 10
+        self.grid_rows = 30
+        self.create_grid_layout()
         self.init_ui()
         self.init_chart_field()
+
+    def create_grid_layout(self):
+        self.grid_layout_widget_left = QWidget(self)
+        self.grid_layout_widget_left.setGeometry(QtCore.QRect(0, 0, self.config.APP_WIDTH / 2, self.config.APP_HEIGHT))
+        self.grid_layout_widget_left.setObjectName('grid_layout_widget_left')
+        self.grid_layout_left = QGridLayout(self.grid_layout_widget_left)
+        self.grid_layout_left.setContentsMargins(10, 10, 10, 10)
+        self.grid_layout_left.setObjectName('grid_layout_left')
+
+        self.grid_layout_widget_right = QWidget(self)
+        self.grid_layout_widget_right.setGeometry(
+            QtCore.QRect(self.config.APP_WIDTH / 2, 0, self.config.APP_WIDTH / 2, self.config.APP_HEIGHT))
+        self.grid_layout_widget_right.setObjectName('grid_layout_widget_right')
+        self.grid_layout_right = QGridLayout(self.grid_layout_widget_right)
+        self.grid_layout_right.setContentsMargins(10, 10, 10, 10)
+        self.grid_layout_right.setObjectName('grid_layout_right')
 
     def init_ui(self):
         """Function initializes user interface."""
         function_list = self.get_template_function_list()
-        self.func_label = self.create_label(20, 20, 'Funkcja wejściowa y')
-        self.func_combo_box = self.create_combobox(20, 45, 500, 25, function_list)
+        self.func_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 0, 0, 1, 10,
+                                            'Funkcja wejściowa y')
+        self.func_combo_box = self.create_combobox(self.grid_layout_widget_left, self.grid_layout_left, 1, 0, 1, 10,
+                                                   function_list)
 
-        self.stop_criterion_label = self.create_label(20, 80, 'Kryterium stopu')
+        self.stop_criterion_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 2, 0, 1, 10,
+                                                      'Kryterium stopu')
         stop_criterion_list = ['dla x: ||x\u2099 - x\u2099 \u208B \u2081|| \u2264 \u03B5',
                                'dla f(x): |f(x\u2099) - f(x\u2099 \u208B \u2081)| \u2264 \u03B5',
                                'Liczba iteracji']
-        self.stop_criterion_combo_box = self.create_combobox(20, 105, 400, 25, stop_criterion_list, editable=False)
-        self.iteration_input = self.create_input(430, 105, 90, 25, enabled=False)
+        self.stop_criterion_combo_box = self.create_combobox(self.grid_layout_widget_left, self.grid_layout_left, 3, 0,
+                                                             1, 8,
+                                                             stop_criterion_list, editable=False)
+        self.iteration_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 3, 8, 1, 2,
+                                                 enabled=False)
         self.stop_criterion_combo_box.currentIndexChanged.connect(self.enable_iterations_input)
 
-        self.search_range_label = self.create_label(20, 140, 'Przedziały poszukiwań')
+        self.search_range_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 4, 0, 1, 10,
+                                                    'Przedziały poszukiwań')
 
-        self.x1_label = self.create_label(20, 165, 'Dla x1:')
-        self.x1_a_label = self.create_label(100, 165, 'x\u2080 = ')
-        self.x1_a_input = self.create_input(130, 165, 100, 25)
-        self.x1_b_label = self.create_label(250, 165, 'd = ')
-        self.x1_b_input = self.create_input(280, 165, 100, 25)
+        self.x1_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 5, 0, 1, 2, 'Dla x1:')
+        self.x1_a_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 5, 1, 1, 1,
+                                            '    x\u2080 = ')
+        self.x1_a_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 5, 2, 1, 2)
+        self.x1_b_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 5, 4, 1, 1,
+                                            '     d = ')
+        self.x1_b_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 5, 5, 1, 2)
 
-        self.x2_label = self.create_label(20, 200, 'Dla x2:')
-        self.x2_a_label = self.create_label(100, 200, 'x\u2080 = ')
-        self.x2_a_input = self.create_input(130, 200, 100, 25)
-        self.x2_b_label = self.create_label(250, 200, 'd = ')
-        self.x2_b_input = self.create_input(280, 200, 100, 25)
+        self.x2_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 6, 0, 1, 2, 'Dla x2:')
+        self.x2_a_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 6, 1, 1, 1,
+                                            '    x\u2080 = ')
+        self.x2_a_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 6, 2, 1, 2)
+        self.x2_b_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 6, 4, 1, 1,
+                                            '     d = ')
+        self.x2_b_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 6, 5, 1, 2)
 
-        self.x3_label = self.create_label(20, 235, 'Dla x3:')
-        self.x3_a_label = self.create_label(100, 235, 'x\u2080 = ')
-        self.x3_a_input = self.create_input(130, 235, 100, 25)
-        self.x3_b_label = self.create_label(250, 235, 'd = ')
-        self.x3_b_input = self.create_input(280, 235, 100, 25)
+        self.x3_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 7, 0, 1, 2, 'Dla x3:')
+        self.x3_a_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 7, 1, 1, 1,
+                                            '    x\u2080 = ')
+        self.x3_a_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 7, 2, 1, 2)
+        self.x3_b_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 7, 4, 1, 1,
+                                            '     d = ')
+        self.x3_b_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 7, 5, 1, 2)
 
-        self.x4_label = self.create_label(20, 270, 'Dla x4:')
-        self.x4_a_label = self.create_label(100, 270, 'x\u2080 = ')
-        self.x4_a_input = self.create_input(130, 270, 100, 25)
-        self.x4_b_label = self.create_label(250, 270, 'd = ')
-        self.x4_b_input = self.create_input(280, 270, 100, 25)
+        self.x4_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 8, 0, 1, 2, 'Dla x4:')
+        self.x4_a_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 8, 1, 1, 1,
+                                            '    x\u2080 = ')
+        self.x4_a_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 8, 2, 1, 2)
+        self.x4_b_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 8, 4, 1, 1,
+                                            '     d = ')
+        self.x4_b_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 8, 5, 1, 2)
 
-        self.x5_label = self.create_label(20, 305, 'Dla x5:')
-        self.x5_a_label = self.create_label(100, 305, 'x\u2080 = ')
-        self.x5_a_input = self.create_input(130, 305, 100, 25)
-        self.x5_b_label = self.create_label(250, 305, 'd = ')
-        self.x5_b_input = self.create_input(280, 305, 100, 25)
+        self.x5_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 9, 0, 1, 2, 'Dla x5:')
+        self.x5_a_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 9, 1, 1, 1,
+                                            '    x\u2080 = ')
+        self.x5_a_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 9, 2, 1, 2)
+        self.x5_b_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 9, 4, 1, 1,
+                                            '     d = ')
+        self.x5_b_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 9, 5, 1, 2)
 
-        self.tau_label = self.create_label(100, 360, '\u03c4 = ')
-        self.tau_input = self.create_input(130, 360, 100, 25, text='1')
+        self.tau_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 10, 1, 1, 1,
+                                           '     \u03c4 = ')
+        self.tau_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 10, 2, 1, 1, text='1')
 
-        self.epsilon_label = self.create_label(250, 360, '\u03b5 = ')
-        self.epsilon_input = self.create_input(280, 360, 100, 25, text='0.001')
+        self.epsilon_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 10, 3, 1, 1,
+                                               '     \u03b5 = ')
+        self.epsilon_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 10, 4, 1, 1,
+                                               text='0.001')
 
-        self.prompter = self.create_prompter(20, Config.APP_HEIGHT - 250, 500, 230)
+        self.func_button = self.create_button(self.grid_layout_widget_left, self.grid_layout_left, 11, 2, 1, 6,
+                                              'Znajdź minimum',
+                                              self.run_algorithm)
 
-        self.func_button = self.create_button(170, 405, 200, 25, 'Znajdź minimum', self.run_algorithm, auto_size=False)
+        self.prompter = self.create_prompter(self.grid_layout_widget_left, self.grid_layout_left, 12, 0, 15, 10)
 
-    # TODO: Add possible of plotting charts (embeded matplotlib)
     def init_chart_field(self):
         """Function initializes chart inputs and chart field."""
-        pass
+        self.x1_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 0, 4, 1, 6,
+                                                'Rysunek warstwic dla n = 2')
+        self.plot_field = PlotField(self)
+        self.grid_layout_right.addWidget(self.plot_field.toolbar, 1, 0, 1, 10)
+        self.grid_layout_right.addWidget(self.plot_field.canvas, 2, 0, 1, 10)
 
-    def create_label(self, x, y, text):
+        self.x1_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 3, 0, 1, 1,
+                                                '        Zakres x1:')
+        self.x1_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 2, 1, 1)
+        self.x1_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 4, 1, 1)
+
+        self.x2_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 4, 0, 1, 2,
+                                                '        Zakres x2:')
+        self.x2_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 2, 1, 1)
+        self.x2_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 4, 1, 1)
+
+        self.button = self.create_button(self.grid_layout_widget_right, self.grid_layout_right, 5, 0, 1, 10, 'Rysuj',
+                                         self.plot_field.plot)
+
+    def create_label(self, widget, layout, row, cell, height, width, text):
         """Function creates label on the app window."""
-        label = QLabel(self)
-        label.setGeometry(QtCore.QRect(x, y, 0, 0))
+        label = QLabel(widget)
         label.setText(text)
-        label.adjustSize()
+        label.setFixedSize(((self.config.APP_WIDTH - 20) / self.grid_cols) * width,
+                           ((self.config.APP_HEIGHT - 20) / self.grid_rows) * height)
+        layout.addWidget(label, row, cell, height, width)
         return label
 
-    def create_button(self, x, y, width, height, text, function, auto_size=True):
+    def create_button(self, widget, layout, row, cell, height, width, text, function):
         """Function creates button on the app window."""
-        button = QPushButton(self)
-        button.setGeometry(QtCore.QRect(x, y, width, height))
+        button = QPushButton(widget)
         button.setText(text)
-        if auto_size:
-            button.adjustSize()
         button.clicked.connect(function)
+        button.setFixedSize((((self.config.APP_WIDTH / 2) - 20) / self.grid_cols) * width,
+                            ((self.config.APP_HEIGHT - 20) / self.grid_rows) * height)
+        layout.addWidget(button, row, cell, height, width)
         return button
 
-    def create_combobox(self, x, y, width, height, function_list=None, editable=True):
+    def create_combobox(self, widget, layout, row, cell, height, width, function_list=None, editable=True):
         """Function creates combo box for entering functions."""
-        combo_box = QComboBox(self)
-        combo_box.setGeometry(QtCore.QRect(x, y, width, height))
+        combo_box = QComboBox(widget)
         combo_box.setEditable(editable)
         if function_list:
             if editable:
                 combo_box.addItem('')
             for item in function_list:
                 combo_box.addItem(item)
+        combo_box.setFixedSize((((self.config.APP_WIDTH / 2) - 20) / self.grid_cols) * width,
+                               ((self.config.APP_HEIGHT - 20) / self.grid_rows) * height)
+        layout.addWidget(combo_box, row, cell, height, width)
         return combo_box
 
-    def create_input(self, x, y, width, height, enabled=True, text=None):
+    def create_input(self, widget, layout, row, cell, height, width, enabled=True, text=None):
         """Function creates input."""
-        input_field = QLineEdit(self)
-        input_field.setGeometry(QtCore.QRect(x, y, width, height))
+        input_field = QLineEdit(widget)
         input_field.setEnabled(enabled)
         if text:
             input_field.setText(text)
+        input_field.setFixedSize((((self.config.APP_WIDTH / 2) - 20) / self.grid_cols) * width,
+                                 ((self.config.APP_HEIGHT - 20) / self.grid_rows) * height)
+        layout.addWidget(input_field, row, cell, height, width)
         return input_field
 
-    def create_prompter(self, x, y, width, height):
+    def create_prompter(self, widget, layout, row, cell, height, width):
         """Function creates prompter to display all app states."""
-        prompter = QTextBrowser(self)
-        prompter.setGeometry(QtCore.QRect(x, y, width, height))
+        prompter = QTextBrowser(widget)
+        prompter.setFixedSize((((self.config.APP_WIDTH / 2) - 20) / self.grid_cols) * width,
+                              ((self.config.APP_HEIGHT - 20) / self.grid_rows) * height)
+        layout.addWidget(prompter, row, cell, height, width)
         return prompter
 
     def create_error_message(self, text):
