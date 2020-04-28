@@ -130,7 +130,7 @@ class Lexer:
     def find_variable(self, tokens):
         variables = []
         for i in range(len(tokens)):
-            if (tokens[i]).type == TokenType.LETTER:
-                variables.append(tokens[i])     
+            if (tokens[i]).type == TokenType.LETTER and (tokens[i]).value not in variables:
+                variables.append((tokens[i]).value)     
 
         return variables          
