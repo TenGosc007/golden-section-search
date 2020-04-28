@@ -7,9 +7,7 @@ from src.config import Config
 from src.plot_field import PlotField
 from src.utils import example_function_n5
 
-from src.lexer import Lexer
-from src.math_parser import Parser
-from src.interpreter import Interpreter
+from src.math_interpreter import *
 
 
 class Window(QMainWindow):
@@ -226,23 +224,12 @@ class Window(QMainWindow):
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
 
-        # obliczanie ----------------------------------------------------
-        print('F(x): ', function)
-
-        lexer = Lexer(function)
-        tokens = lexer.generate_tokens()
-        token_list = list(tokens)
-        variables = lexer.find_variable(token_list)
-        # parser = Parser(token_list, {'x1':1, 'x2':2})
-        parser = Parser(token_list)
-        tree = parser.parse()
-        print(token_list)
-        print(tree)
-        
-        interpreter = Interpreter()
-        value = interpreter.visit(tree)
-        print("result > ", value)
-        # koniec obliczania ---------------------------------------------
+        # Parser
+        vars = [-2, 1, 0]
+        token_list = function_lexer(function)
+        variables = variables_amount(function, token_list)
+        value = function_calculation(token_list, vars)
+        # Parser end
 
         if not function or stop_criterion == 'Liczba iteracji L = ':
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
@@ -250,8 +237,8 @@ class Window(QMainWindow):
 
             input_info = f'------------------------ Dane wejściowe ------------------------\n\n' \
                          f'Funkcja wejściowa:\ny = {function}\n\n' \
-                         f'Zmienne w funkcji:\ny = {variables}\n\n' \
-                         f'Liczba zmiennych:\ny = {len(variables)}\n\n' \
+                         f'Zmienne w funkcji:\n {variables}\n\n' \
+                         f'Liczba zmiennych:\nn = {len(variables)}\n\n' \
                          f'Wynik funkcji wyjściowej:\ny = {value}\n\n' \
                          f'Kryterium stopu:\n{stop_criterion}\n\n' \
                          f'Przedziały poszukiwań:\n' \
