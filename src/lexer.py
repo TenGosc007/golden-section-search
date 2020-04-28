@@ -126,3 +126,11 @@ class Lexer:
             self.advance()
 
         return Token(TokenType.LETTER, letter)
+
+    def find_variable(self, tokens):
+        variables = []
+        for i in range(len(tokens)):
+            if (tokens[i]).type == TokenType.LETTER:
+                variables.append(tokens[i])     
+
+        return variables          

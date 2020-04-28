@@ -52,6 +52,8 @@ for i in range(len(TEMPLATE_FUNCTIONS)):
     lexer = Lexer(text)
     tokens = lexer.generate_tokens()
     token_list = list(tokens)
+    variables = lexer.find_variable(token_list)
+    print('variables -> ', variables, 'amount: ', len(variables))
     parser = Parser(token_list, variable)
     tree = parser.parse()
     print(token_list)
