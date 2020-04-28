@@ -224,12 +224,10 @@ class Window(QMainWindow):
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
 
-        # Parser
         vars = [-2, 1, 0]
         token_list = function_lexer(function)
         variables = variables_amount(function, token_list)
         value = function_calculation(token_list, vars)
-        # Parser end
 
         if not function or stop_criterion == 'Liczba iteracji L = ':
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
