@@ -4,10 +4,9 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QComboBox, QLineEd
 
 from src.algorithm import Algorithm
 from src.config import Config
+from src.math_interpreter import MathInterpreter
 from src.plot_field import PlotField
 from src.utils import example_function_n5
-
-from src.math_interpreter import *
 
 
 class Window(QMainWindow):
@@ -119,24 +118,29 @@ class Window(QMainWindow):
 
     def init_chart_field(self):
         """Function initializes chart inputs and chart field."""
+        self.plot_field = PlotField(self)
         self.x1_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 0, 4, 1, 6,
                                                 'Rysunek warstwic dla n = 2')
-        self.plot_field = PlotField(self)
         self.grid_layout_right.addWidget(self.plot_field.toolbar, 1, 0, 1, 10)
         self.grid_layout_right.addWidget(self.plot_field.canvas, 2, 0, 1, 10)
 
         self.x1_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 3, 0, 1, 1,
                                                 '        Zakres x1:')
-        self.x1_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 2, 1, 1)
-        self.x1_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 4, 1, 1)
+        self.x1_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 2, 1, 1,
+                                                 enabled=False, text='0')
+        self.x1_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 4, 1, 1,
+                                                 enabled=False, text='1')
 
         self.x2_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 4, 0, 1, 2,
                                                 '        Zakres x2:')
-        self.x2_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 2, 1, 1)
-        self.x2_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 4, 1, 1)
+        self.x2_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 2, 1, 1,
+                                                 enabled=False, text='0')
+        self.x2_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 4, 1, 1,
+                                                 enabled=False, text='1')
 
-        self.button = self.create_button(self.grid_layout_widget_right, self.grid_layout_right, 5, 0, 1, 10, 'Rysuj',
-                                         self.plot_field.plot)
+        self.draw_button = self.create_button(self.grid_layout_widget_right, self.grid_layout_right, 5, 0, 1, 10,
+                                              'Rysuj',
+                                              self.plot_field.plot, enabled=False)
 
     def create_label(self, widget, layout, row, cell, height, width, text):
         """Function creates label on the app window."""
@@ -147,7 +151,7 @@ class Window(QMainWindow):
         layout.addWidget(label, row, cell, height, width)
         return label
 
-    def create_button(self, widget, layout, row, cell, height, width, text, function):
+    def create_button(self, widget, layout, row, cell, height, width, text, function, enabled=True):
         """Function creates button on the app window."""
         button = QPushButton(widget)
         button.setText(text)
@@ -155,6 +159,7 @@ class Window(QMainWindow):
         button.setFixedSize((((self.config.APP_WIDTH / 2) - 20) / self.grid_cols) * width,
                             ((self.config.APP_HEIGHT - 20) / self.grid_rows) * height)
         layout.addWidget(button, row, cell, height, width)
+        button.setEnabled(enabled)
         return button
 
     def create_combobox(self, widget, layout, row, cell, height, width, function_list=None, editable=True):
@@ -209,35 +214,44 @@ class Window(QMainWindow):
         else:
             self.iteration_input.setEnabled(False)
 
+    def enable_drawing_chart(self, variables_amount):
+        if variables_amount == 2:
+            self.x1_range_input1.setEnabled(True)
+            self.x1_range_input2.setEnabled(True)
+            self.x2_range_input1.setEnabled(True)
+            self.x2_range_input2.setEnabled(True)
+            self.draw_button.setEnabled(True)
+
     def run_algorithm(self):
         """Function changes text to function in combo_box"""
         function = str(self.func_combo_box.currentText())
         stop_criterion = str(self.stop_criterion_combo_box.currentText())
-        x1a, x1b = float(self.x1_a_input.text()), float(self.x1_b_input.text())
-        x2a, x2b = float(self.x2_a_input.text()), float(self.x2_b_input.text())
-        x3a, x3b = float(self.x3_a_input.text()), float(self.x3_b_input.text())
-        x4a, x4b = float(self.x4_a_input.text()), float(self.x4_b_input.text())
-        x5a, x5b = float(self.x5_a_input.text()), float(self.x5_b_input.text())
+        x1a, x1b = float(self.x1_a_input.text() or 0), float(self.x1_b_input.text() or 1)
+        x2a, x2b = float(self.x2_a_input.text() or 0), float(self.x2_b_input.text() or 1)
+        x3a, x3b = float(self.x3_a_input.text() or 0), float(self.x3_b_input.text() or 1)
+        x4a, x4b = float(self.x4_a_input.text() or 0), float(self.x4_b_input.text() or 1)
+        x5a, x5b = float(self.x5_a_input.text() or 0), float(self.x5_b_input.text() or 1)
         tau = float(self.tau_input.text())
         epsilon = float(self.epsilon_input.text())
 
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
 
-        vars_list = [-2, 1, 0, 5]
-        token_list = function_lexer(function)
-        variables = variables_amount(function, token_list)
-        value = function_calculation(token_list, vars_list)
+        vars_value = [1.0, 0.0, 0.0, 5.0]
+        self.math_interpreter = MathInterpreter(function)
+        self.plot_field.math_interpreter = self.math_interpreter
+        self.enable_drawing_chart(self.math_interpreter.variables_amount())
 
         if not function or stop_criterion == 'Liczba iteracji L = ':
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
         else:
-
             input_info = f'------------------------ Dane wejściowe ------------------------\n\n' \
                          f'Funkcja wejściowa:\ny = {function}\n\n' \
-                         f'Zmienne w funkcji:\n {variables}\n\n' \
-                         f'Liczba zmiennych:\nn = {len(variables)}\n\n' \
-                         f'Wynik funkcji wyjściowej:\ny = {value}\n\n' \
+                         f'Zmienne w funkcji:\n {self.math_interpreter.get_variables()}\n\n' \
+                         f'Liczba zmiennych:\nn = {self.math_interpreter.variables_amount()}\n\n' \
+                         f'Wynik funkcji wyjściowej:\ny = {self.math_interpreter.calculate(vars_value)}\n\n' \
+                         f'Token list: {self.math_interpreter.get_token_list()}\n\n'\
+                         f'Wynik funkcji wyjściowej2:\ny = {self.math_interpreter.calculate([2,1,-2,0])}\n\n' \
                          f'Kryterium stopu:\n{stop_criterion}\n\n' \
                          f'Przedziały poszukiwań:\n' \
                          f'Dla x1: x\u2080={x1a}, d={x1b}\n' \
