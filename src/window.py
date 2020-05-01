@@ -118,25 +118,25 @@ class Window(QMainWindow):
 
     def init_chart_field(self):
         """Function initializes chart inputs and chart field."""
+        self.plot_field = PlotField(self)
         self.x1_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 0, 4, 1, 6,
                                                 'Rysunek warstwic dla n = 2')
-        self.plot_field = PlotField(self)
         self.grid_layout_right.addWidget(self.plot_field.toolbar, 1, 0, 1, 10)
         self.grid_layout_right.addWidget(self.plot_field.canvas, 2, 0, 1, 10)
 
         self.x1_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 3, 0, 1, 1,
                                                 '        Zakres x1:')
         self.x1_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 2, 1, 1,
-                                                 enabled=False)
+                                                 enabled=False, text='0')
         self.x1_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 4, 1, 1,
-                                                 enabled=False)
+                                                 enabled=False, text='1')
 
         self.x2_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 4, 0, 1, 2,
                                                 '        Zakres x2:')
         self.x2_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 2, 1, 1,
-                                                 enabled=False)
+                                                 enabled=False, text='0')
         self.x2_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 4, 1, 1,
-                                                 enabled=False)
+                                                 enabled=False, text='1')
 
         self.draw_button = self.create_button(self.grid_layout_widget_right, self.grid_layout_right, 5, 0, 1, 10,
                                               'Rysuj',
@@ -237,18 +237,19 @@ class Window(QMainWindow):
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
 
-        vars_value = [-2, 1, 0, 5]
-        interpreter = MathInterpreter(function)
-        self.enable_drawing_chart(interpreter.variables_amount())
+        vars_value = [1.0, 0.0, 0.0, 5.0]
+        self.math_interpreter = MathInterpreter(function)
+        self.plot_field.math_interpreter = self.math_interpreter
+        self.enable_drawing_chart(self.math_interpreter.variables_amount())
 
         if not function or stop_criterion == 'Liczba iteracji L = ':
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
         else:
             input_info = f'------------------------ Dane wejściowe ------------------------\n\n' \
                          f'Funkcja wejściowa:\ny = {function}\n\n' \
-                         f'Zmienne w funkcji:\n {interpreter.get_variables()}\n\n' \
-                         f'Liczba zmiennych:\nn = {interpreter.variables_amount()}\n\n' \
-                         f'Wynik funkcji wyjściowej:\ny = {interpreter.calculate(vars_value)}\n\n' \
+                         f'Zmienne w funkcji:\n {self.math_interpreter.get_variables()}\n\n' \
+                         f'Liczba zmiennych:\nn = {self.math_interpreter.variables_amount()}\n\n' \
+                         f'Wynik funkcji wyjściowej:\ny = {self.math_interpreter.calculate(vars_value)}\n\n' \
                          f'Kryterium stopu:\n{stop_criterion}\n\n' \
                          f'Przedziały poszukiwań:\n' \
                          f'Dla x1: x\u2080={x1a}, d={x1b}\n' \
