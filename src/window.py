@@ -4,10 +4,9 @@ from PyQt5.QtWidgets import QMainWindow, QLabel, QPushButton, QComboBox, QLineEd
 
 from src.algorithm import Algorithm
 from src.config import Config
+from src.math_interpreter import MathInterpreter
 from src.plot_field import PlotField
 from src.utils import example_function_n5
-
-from src.math_interpreter import *
 
 
 class Window(QMainWindow):
@@ -224,10 +223,8 @@ class Window(QMainWindow):
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
 
-        vars = [-2, 1, 0]
-        token_list = function_lexer(function)
-        variables = variables_amount(function, token_list)
-        value = function_calculation(token_list, vars)
+        vars_value = [-2, 1, 0, 5]
+        interpreter = MathInterpreter(function)
 
         if not function or stop_criterion == 'Liczba iteracji L = ':
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
@@ -235,9 +232,9 @@ class Window(QMainWindow):
 
             input_info = f'------------------------ Dane wejściowe ------------------------\n\n' \
                          f'Funkcja wejściowa:\ny = {function}\n\n' \
-                         f'Zmienne w funkcji:\n {variables}\n\n' \
-                         f'Liczba zmiennych:\nn = {len(variables)}\n\n' \
-                         f'Wynik funkcji wyjściowej:\ny = {value}\n\n' \
+                         f'Zmienne w funkcji:\n {interpreter.get_variables()}\n\n' \
+                         f'Liczba zmiennych:\nn = {interpreter.variables_amount()}\n\n' \
+                         f'Wynik funkcji wyjściowej:\ny = {interpreter.calculate(vars_value)}\n\n' \
                          f'Kryterium stopu:\n{stop_criterion}\n\n' \
                          f'Przedziały poszukiwań:\n' \
                          f'Dla x1: x\u2080={x1a}, d={x1b}\n' \
