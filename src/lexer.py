@@ -131,6 +131,6 @@ class Lexer:
         variables = []
         for i in range(len(tokens)):
             if (tokens[i]).type == TokenType.LETTER and (tokens[i]).value not in variables:
-                variables.append((tokens[i]).value)     
+                variables.append((tokens[i]).value)
 
-        return variables          
+        return variables
