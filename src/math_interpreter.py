@@ -1,7 +1,9 @@
+import copy
+
 from src.interpreter import Interpreter
 from src.lexer import Lexer
 from src.math_parser import Parser
-import copy
+
 
 class MathInterpreter:
     def __init__(self, function):

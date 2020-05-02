@@ -250,8 +250,6 @@ class Window(QMainWindow):
                          f'Zmienne w funkcji:\n {self.math_interpreter.get_variables()}\n\n' \
                          f'Liczba zmiennych:\nn = {self.math_interpreter.variables_amount()}\n\n' \
                          f'Wynik funkcji wyjściowej:\ny = {self.math_interpreter.calculate(vars_value)}\n\n' \
-                         f'Token list: {self.math_interpreter.get_token_list()}\n\n'\
-                         f'Wynik funkcji wyjściowej2:\ny = {self.math_interpreter.calculate([2,1,-2,0])}\n\n' \
                          f'Kryterium stopu:\n{stop_criterion}\n\n' \
                          f'Przedziały poszukiwań:\n' \
                          f'Dla x1: x\u2080={x1a}, d={x1b}\n' \
