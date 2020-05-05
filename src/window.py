@@ -6,7 +6,6 @@ from src.algorithm import Algorithm
 from src.config import Config
 from src.math_interpreter import MathInterpreter
 from src.plot_field import PlotField
-from src.utils import example_function_n5
 
 
 class Window(QMainWindow):
@@ -266,7 +265,6 @@ class Window(QMainWindow):
 
             x0 = [x1a, x2a, x3a, x4a, x5a]
             d = [x1b, x2b, x3b, x4b, x5b]
-            stop = None  # temporary
-            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop,
+            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop_criterion,
                                        self.math_interpreter.calculate, self.prompter)
             self.algorithm.find_minimum_value()

@@ -49,8 +49,8 @@ class PlotField:
             ax.add_patch(p)
             art3d.pathpatch_2d_to_3d(p, z=zz, zdir="z")
 
-            ax.set_xlabel('x1 label')
-            ax.set_ylabel('x2 label')
-            ax.set_zlabel('y label')
+            ax.set_xlabel('x1')
+            ax.set_ylabel('x2')
+            ax.set_zlabel('y')
 
             self.canvas.draw()

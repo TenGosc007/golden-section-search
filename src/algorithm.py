@@ -2,26 +2,26 @@ from math import sqrt
 
 
 class Algorithm:
-    def __init__(self, a, b, n, tau, epsilon, stop, function, logger):
+    def __init__(self, x0, d, n, tau, epsilon, stop, function, logger):
         self.epsilon = epsilon
         self.k = (sqrt(5) - 1) / 2
         self.n = n
-        self.tau = tau  # TODO: Change length of ranges
+        self.tau = tau
         self.stop = stop  # TODO: Add usage for different stop criterion
-        self.vars_dict = self.get_vars_dict(a, b, self.n)
+        self.vars_dict = self.get_vars_dict(x0, d, self.n)
         self.function = function
         self.logger = logger
         self.iteration = 0
         self.min_value = None
 
-    def get_vars_dict(self, a, b, n):
+    def get_vars_dict(self, x0, d, n):
         """Function initialises vars for algorithm."""
         vars_dict = {}
         for i in range(n):
-            vars_dict[f'a_{i}'] = a[i]
-            vars_dict[f'b_{i}'] = b[i]
-            vars_dict[f'x1_{i}'] = a[i] + (1 - self.k) * (b[i] - a[i])
-            vars_dict[f'x2_{i}'] = a[i] + self.k * (b[i] - a[i])
+            vars_dict[f'a_{i}'] = x0[i]
+            vars_dict[f'b_{i}'] = x0[i] + self.tau * d[i]
+            vars_dict[f'x1_{i}'] = x0[i] + (1 - self.k) * ((x0[i] + self.tau * d[i]) - x0[i])
+            vars_dict[f'x2_{i}'] = x0[i] + self.k * ((x0[i] + self.tau * d[i]) - x0[i])
 
         return vars_dict
 
