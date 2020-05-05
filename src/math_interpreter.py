@@ -45,4 +45,4 @@ class MathInterpreter:
         value = interpreter.visit(tree)
         self.token_list = tokens
 
-        return value
+        return value.value

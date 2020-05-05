@@ -21,6 +21,7 @@ class Window(QMainWindow):
         self.create_grid_layout()
         self.init_ui()
         self.init_chart_field()
+        self.algorithm = None
 
     def create_grid_layout(self):
         self.grid_layout_widget_left = QWidget(self)
@@ -264,12 +265,11 @@ class Window(QMainWindow):
             self.prompter.append(input_info)
 
             # temporary
-            function_evaluator = example_function_n5
-            n = 5
             # a = [x1a, x2a, x3a, x4a, x5a]
             # b = [x1b, x2b, x3b, x4b, x5b]
             x0 = [0, 0, 0, 0, 0]  # temporary constant
             d = [1, 1, 1, 1, 1]
             stop = None  # temporary
-            algorithm = Algorithm(x0, d, n, tau, epsilon, stop, function_evaluator, self.prompter)
-            algorithm.find_minimum_value()
+            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop,
+                                       self.math_interpreter.calculate, self.prompter)
+            self.algorithm.find_minimum_value()

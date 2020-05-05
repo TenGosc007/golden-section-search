@@ -35,14 +35,16 @@ class PlotField:
         z_surf = np.zeros((len(x_surf), len(y_surf)))
         for i in range(len(x_surf[0])):
             for j in range(len(y_surf[0])):
-                z_surf[i, j] = self.math_interpreter.calculate([x_surf[0, i], y_surf[j, 0]]).value
+                z_surf[i, j] = self.math_interpreter.calculate([x_surf[0, i], y_surf[j, 0]])
 
         ax.plot_surface(x_surf, y_surf, z_surf, rstride=1, cstride=1, cmap='viridis_r', alpha=.9)
 
         width, height = abs(x2 - x1) / 50, abs(y2 - y1) / 50
-        p = Ellipse((x_surf[0, 10], y_surf[10, 0]), width, height, color='r')
+        xx, yy = self.window.algorithm.min_value
+        zz = self.math_interpreter.calculate([xx, yy])
+        p = Ellipse((xx, yy), width, height, color='r')
         ax.add_patch(p)
-        art3d.pathpatch_2d_to_3d(p, z=z_surf[10, 10], zdir="z")
+        art3d.pathpatch_2d_to_3d(p, z=zz, zdir="z")
 
         ax.set_xlabel('x1 label')
         ax.set_ylabel('x2 label')

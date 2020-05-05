@@ -12,6 +12,7 @@ class Algorithm:
         self.function = function
         self.logger = logger
         self.iteration = 0
+        self.min_value = None
 
     def get_vars_dict(self, a, b, n):
         """Function initialises vars for algorithm."""
@@ -47,6 +48,7 @@ class Algorithm:
 
         self.logger.append('\n------------------------ Wyniki ------------------------')
         self.print_algorithm_result(f_value, minimum, points)
+        self.min_value = points[f_value.index(minimum)]
 
     def create_var_combinations(self):
         """Function creates 2^n combinations of available variables."""
