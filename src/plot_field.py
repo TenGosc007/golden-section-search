@@ -1,10 +1,9 @@
-from random import random
-
 import numpy as np
-from matplotlib import cm
 from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg as FigureCanvas
 from matplotlib.backends.backend_qt5agg import NavigationToolbar2QT as NavigationToolbar
 from matplotlib.figure import Figure
+from matplotlib.patches import Ellipse
+from mpl_toolkits.mplot3d import art3d
 
 
 class PlotField:
@@ -31,11 +30,16 @@ class PlotField:
         for i in range(len(x_surf[0])):
             for j in range(len(y_surf[0])):
                 z_surf[i, j] = self.math_interpreter.calculate([x_surf[0, i], y_surf[j, 0]]).value
-        ax.plot_surface(x_surf, y_surf, z_surf, cmap=cm.hot)  # plot a 3d surface plot
 
-        ax.scatter(x_surf[0, 10], y_surf[10, 0], z_surf[10, 10], s=20, c='b')
-        ax.set_xlabel('x label')
-        ax.set_ylabel('y label')
-        ax.set_zlabel('z label')
+        ax.plot_surface(x_surf, y_surf, z_surf, rstride=1, cstride=1, cmap='viridis_r', alpha=.9)  # plot a 3d surface plot
+
+        width, height = abs(x2 - x1) / 50, abs(y2 - y1) / 50
+        p = Ellipse((x_surf[0, 10], y_surf[10, 0]), width, height, color='r')
+        ax.add_patch(p)
+        art3d.pathpatch_2d_to_3d(p, z=z_surf[10, 10], zdir="z")
+
+        ax.set_xlabel('x1 label')
+        ax.set_ylabel('x2 label')
+        ax.set_zlabel('y label')
 
         self.canvas.draw()

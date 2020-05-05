@@ -261,7 +261,6 @@ class Window(QMainWindow):
 
             self.prompter.append(input_info)
 
-            # TODO: function parser which returns n and function value evaluator
             # temporary
             function_evaluator = example_function_n5
             n = 5
