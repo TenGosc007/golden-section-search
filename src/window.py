@@ -264,11 +264,8 @@ class Window(QMainWindow):
 
             self.prompter.append(input_info)
 
-            # temporary
-            # a = [x1a, x2a, x3a, x4a, x5a]
-            # b = [x1b, x2b, x3b, x4b, x5b]
-            x0 = [0, 0, 0, 0, 0]  # temporary constant
-            d = [1, 1, 1, 1, 1]
+            x0 = [x1a, x2a, x3a, x4a, x5a]
+            d = [x1b, x2b, x3b, x4b, x5b]
             stop = None  # temporary
             self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop,
                                        self.math_interpreter.calculate, self.prompter)
