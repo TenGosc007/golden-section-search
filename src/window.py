@@ -139,8 +139,9 @@ class Window(QMainWindow):
                                                  enabled=False, text='1')
 
         self.draw_button = self.create_button(self.grid_layout_widget_right, self.grid_layout_right, 5, 0, 1, 10,
-                                              'Rysuj',
-                                              self.plot_field.plot, enabled=False)
+                                              'Rysuj', self.plot_field.plot, enabled=False)
+        self.reset_button = self.create_button(self.grid_layout_widget_right, self.grid_layout_right, 6, 0, 1, 10,
+                                               'Reset', self.plot_field.reset, enabled=False)
 
     def create_label(self, widget, layout, row, cell, height, width, text):
         """Function creates label on the app window."""
@@ -221,6 +222,7 @@ class Window(QMainWindow):
             self.x2_range_input1.setEnabled(True)
             self.x2_range_input2.setEnabled(True)
             self.draw_button.setEnabled(True)
+            self.reset_button.setEnabled(True)
 
     def run_algorithm(self):
         """Function changes text to function in combo_box"""

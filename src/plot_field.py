@@ -14,7 +14,13 @@ class PlotField:
         self.toolbar = NavigationToolbar(self.canvas, self.window)
         self.math_interpreter = None
 
+    def reset(self):
+        """Function clears canvas."""
+        self.figure.clear()
+        self.canvas.draw()
+
     def plot(self):
+        """Function plots chart."""
         ax = self.figure.gca(projection='3d')
 
         x1 = float(self.window.x1_range_input1.text())
@@ -31,7 +37,7 @@ class PlotField:
             for j in range(len(y_surf[0])):
                 z_surf[i, j] = self.math_interpreter.calculate([x_surf[0, i], y_surf[j, 0]]).value
 
-        ax.plot_surface(x_surf, y_surf, z_surf, rstride=1, cstride=1, cmap='viridis_r', alpha=.9)  # plot a 3d surface plot
+        ax.plot_surface(x_surf, y_surf, z_surf, rstride=1, cstride=1, cmap='viridis_r', alpha=.9)
 
         width, height = abs(x2 - x1) / 50, abs(y2 - y1) / 50
         p = Ellipse((x_surf[0, 10], y_surf[10, 0]), width, height, color='r')
