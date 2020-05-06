@@ -228,6 +228,8 @@ class Window(QMainWindow):
         """Function changes text to function in combo_box"""
         function = str(self.func_combo_box.currentText())
         stop_criterion = str(self.stop_criterion_combo_box.currentText())
+        stop_type = self.stop_criterion_combo_box.currentIndex()
+        stop_iteration = 0
         x1a, x1b = float(self.x1_a_input.text() or 0), float(self.x1_b_input.text() or 1)
         x2a, x2b = float(self.x2_a_input.text() or 0), float(self.x2_b_input.text() or 1)
         x3a, x3b = float(self.x3_a_input.text() or 0), float(self.x3_b_input.text() or 1)
@@ -238,7 +240,8 @@ class Window(QMainWindow):
 
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
-
+            stop_iteration = int(self.iteration_input.text())
+        
         vars_value = [1.0, 0.0, 0.0, 5.0]
         self.math_interpreter = MathInterpreter(function)
         self.plot_field.math_interpreter = self.math_interpreter
@@ -265,6 +268,6 @@ class Window(QMainWindow):
 
             x0 = [x1a, x2a, x3a, x4a, x5a]
             d = [x1b, x2b, x3b, x4b, x5b]
-            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop_criterion,
-                                       self.math_interpreter.calculate, self.prompter)
+            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop_type,
+                                       stop_iteration, self.math_interpreter.calculate, self.prompter)
             self.algorithm.find_minimum_value()

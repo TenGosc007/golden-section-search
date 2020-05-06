@@ -2,12 +2,13 @@ from math import sqrt
 
 
 class Algorithm:
-    def __init__(self, x0, d, n, tau, epsilon, stop, function, logger):
+    def __init__(self, x0, d, n, tau, epsilon, stop, stop_iteration, function, logger):
         self.epsilon = epsilon
         self.k = (sqrt(5) - 1) / 2
         self.n = n
-        self.tau = tau
-        self.stop = stop  # TODO: Add usage for different stop criterion
+        self.tau = tau  # TODO: Change length of ranges
+        self.stop = stop 
+        self.stop_iteration = stop_iteration
         self.vars_dict = self.get_vars_dict(x0, d, self.n)
         self.function = function
         self.logger = logger
@@ -25,6 +26,24 @@ class Algorithm:
 
         return vars_dict
 
+    def stop_condition(self, previous_min, current_min, prev_fmin, curr_fmin):
+        """Function performing the stop criterion"""
+        if (previous_min != current_min):
+            if self.stop == 0:
+                stop = abs(abs(current_min - previous_min))
+                return stop
+            elif self.stop == 1:
+                stop = abs(curr_fmin - prev_fmin)
+                return stop
+            elif self.stop == 2:
+                if self.iteration == self.stop_iteration:
+                    return 0
+                elif self.stop_iteration == 0:
+                    return 0
+                else:
+                    return None
+        return None
+
     def find_minimum_value(self):
         """Function prints minimum value for math function."""
         self.logger.append('------------------------ Działanie algorytmu ------------------------')
@@ -34,8 +53,11 @@ class Algorithm:
                    range(len(points))]
         minimum = min(f_value)
 
-        # TODO: Add different stop condition
-        while self.count_distance() > self.epsilon:
+        current_min = points[f_value.index(minimum)][0]
+
+        while True:
+            previous_min = current_min
+            prev_fmin = minimum
             self.iteration += 1
             self.calculate_a_b_value(f_value, minimum, combinations)
             self.calculate_x1_x2_value()
@@ -45,6 +67,11 @@ class Algorithm:
                        range(len(points))]
             minimum = min(f_value)
             self.print_algorithm_result(f_value, minimum, points)
+            
+            current_min = points[f_value.index(minimum)][0]
+            stop = self.stop_condition(previous_min, current_min, prev_fmin, minimum)
+            if stop is not None and stop <= self.epsilon:
+                break
 
         self.logger.append('\n------------------------ Wyniki ------------------------')
         self.print_algorithm_result(f_value, minimum, points)
