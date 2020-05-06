@@ -27,6 +27,7 @@ class Algorithm:
         return vars_dict
 
     def stop_condition(self, previous_min, current_min, prev_fmin, curr_fmin):
+        """Function performing the stop criterion"""
         if (previous_min != current_min):
             if self.stop == 0:
                 stop = abs(abs(current_min - previous_min))
