@@ -216,13 +216,13 @@ class Window(QMainWindow):
             self.iteration_input.setEnabled(False)
 
     def enable_drawing_chart(self, variables_amount):
-        if variables_amount == 2:
-            self.x1_range_input1.setEnabled(True)
-            self.x1_range_input2.setEnabled(True)
-            self.x2_range_input1.setEnabled(True)
-            self.x2_range_input2.setEnabled(True)
-            self.draw_button.setEnabled(True)
-            self.reset_button.setEnabled(True)
+        enabled = True if variables_amount == 2 else False
+        self.x1_range_input1.setEnabled(enabled)
+        self.x1_range_input2.setEnabled(enabled)
+        self.x2_range_input1.setEnabled(enabled)
+        self.x2_range_input2.setEnabled(enabled)
+        self.draw_button.setEnabled(enabled)
+        self.reset_button.setEnabled(enabled)
 
     def run_algorithm(self):
         """Function changes text to function in combo_box"""
@@ -241,8 +241,7 @@ class Window(QMainWindow):
         if stop_criterion == 'Liczba iteracji':
             stop_criterion += f' L = {self.iteration_input.text()}'
             stop_iteration = int(self.iteration_input.text())
-        
-        vars_value = [1.0, 0.0, 0.0, 5.0]
+
         self.math_interpreter = MathInterpreter(function)
         self.plot_field.math_interpreter = self.math_interpreter
         self.enable_drawing_chart(self.math_interpreter.variables_amount())
@@ -256,7 +255,6 @@ class Window(QMainWindow):
                          f'Funkcja wejściowa:\ny = {function}\n\n' \
                          f'Zmienne w funkcji:\n {self.math_interpreter.get_variables()}\n\n' \
                          f'Liczba zmiennych:\nn = {self.math_interpreter.variables_amount()}\n\n' \
-                         f'Wynik funkcji wyjściowej:\ny = {self.math_interpreter.calculate(vars_value)}\n\n' \
                          f'Kryterium stopu:\n{stop_criterion}\n\n' \
                          f'Przedziały poszukiwań:\n' \
                          f'Dla x1: x\u2080={x1a}, d={x1b}\n' \
