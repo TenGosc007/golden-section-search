@@ -6,8 +6,8 @@ class Algorithm:
         self.epsilon = epsilon
         self.k = (sqrt(5) - 1) / 2
         self.n = n
-        self.tau = tau  # TODO: Change length of ranges
-        self.stop = stop 
+        self.tau = tau
+        self.stop = stop
         self.stop_iteration = stop_iteration
         self.vars_dict = self.get_vars_dict(x0, d, self.n)
         self.function = function
@@ -28,7 +28,7 @@ class Algorithm:
 
     def stop_condition(self, previous_min, current_min, prev_fmin, curr_fmin):
         """Function performing the stop criterion"""
-        if (previous_min != current_min):
+        if previous_min != current_min:
             if self.stop == 0:
                 stop = abs(abs(current_min - previous_min))
                 return stop
@@ -67,7 +67,7 @@ class Algorithm:
                        range(len(points))]
             minimum = min(f_value)
             self.print_algorithm_result(f_value, minimum, points)
-            
+
             current_min = points[f_value.index(minimum)][0]
             stop = self.stop_condition(previous_min, current_min, prev_fmin, minimum)
             if stop is not None and stop <= self.epsilon:
