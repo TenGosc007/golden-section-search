@@ -2,12 +2,13 @@ from math import sqrt
 
 
 class Algorithm:
-    def __init__(self, a, b, n, tau, epsilon, stop, function, logger):
+    def __init__(self, a, b, n, tau, epsilon, stop, stop_iteration, function, logger):
         self.epsilon = epsilon
         self.k = (sqrt(5) - 1) / 2
         self.n = n
         self.tau = tau  # TODO: Change length of ranges
-        self.stop = stop  # TODO: Add usage for different stop criterion
+        self.stop = stop 
+        self.stop_iteration = stop_iteration
         self.vars_dict = self.get_vars_dict(a, b, self.n)
         self.function = function
         self.logger = logger
@@ -27,10 +28,18 @@ class Algorithm:
 
     def stop_condition(self, previous_min, current_min):
         if (previous_min != current_min):
-            print(self.stop)
-            stop = abs(abs(current_min - previous_min))
-            # print('stop ', stop, '\n')
-            return stop
+            if self.stop == 0:
+                stop = abs(abs(current_min - previous_min))
+                return stop
+            elif self.stop == 1:
+                return 0
+            elif self.stop == 2:
+                if self.iteration == self.stop_iteration:
+                    return 0
+                elif self.stop_iteration == 0:
+                    return 0
+                else:
+                    return None
 
         return None
 
@@ -45,8 +54,7 @@ class Algorithm:
 
         current_min = points[f_value.index(minimum)][0]
 
-        # TODO: Add different stop condition
-        while self.count_distance() > self.epsilon:
+        while True:
             previous_min = current_min
             self.iteration += 1
             self.calculate_a_b_value(f_value, minimum, combinations)
@@ -57,9 +65,10 @@ class Algorithm:
                        range(len(points))]
             minimum = min(f_value)
             self.print_algorithm_result(f_value, minimum, points)
+            
             current_min = points[f_value.index(minimum)][0]
-
-            if self.stop_condition(previous_min, current_min) is not None and self.stop_condition(previous_min, current_min) <= self.epsilon:
+            stop = self.stop_condition(previous_min, current_min)
+            if stop is not None and stop <= self.epsilon:
                 break
 
         self.logger.append('\n------------------------ Wyniki ------------------------')
