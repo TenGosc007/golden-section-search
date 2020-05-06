@@ -26,13 +26,14 @@ class Algorithm:
 
         return vars_dict
 
-    def stop_condition(self, previous_min, current_min):
+    def stop_condition(self, previous_min, current_min, prev_fmin, curr_fmin):
         if (previous_min != current_min):
             if self.stop == 0:
                 stop = abs(abs(current_min - previous_min))
                 return stop
             elif self.stop == 1:
-                return 0
+                stop = abs(curr_fmin - prev_fmin)
+                return stop
             elif self.stop == 2:
                 if self.iteration == self.stop_iteration:
                     return 0
@@ -40,7 +41,6 @@ class Algorithm:
                     return 0
                 else:
                     return None
-
         return None
 
     def find_minimum_value(self):
@@ -56,6 +56,7 @@ class Algorithm:
 
         while True:
             previous_min = current_min
+            prev_fmin = minimum
             self.iteration += 1
             self.calculate_a_b_value(f_value, minimum, combinations)
             self.calculate_x1_x2_value()
@@ -67,7 +68,7 @@ class Algorithm:
             self.print_algorithm_result(f_value, minimum, points)
             
             current_min = points[f_value.index(minimum)][0]
-            stop = self.stop_condition(previous_min, current_min)
+            stop = self.stop_condition(previous_min, current_min, prev_fmin, minimum)
             if stop is not None and stop <= self.epsilon:
                 break
 
