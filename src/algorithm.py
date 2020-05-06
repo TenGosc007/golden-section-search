@@ -25,6 +25,15 @@ class Algorithm:
 
         return vars_dict
 
+    def stop_condition(self, previous_min, current_min):
+        if (previous_min != current_min):
+            print(self.stop)
+            stop = abs(abs(current_min - previous_min))
+            # print('stop ', stop, '\n')
+            return stop
+
+        return None
+
     def find_minimum_value(self):
         """Function prints minimum value for math function."""
         self.logger.append('------------------------ Działanie algorytmu ------------------------')
@@ -34,8 +43,11 @@ class Algorithm:
                    range(len(points))]
         minimum = min(f_value)
 
+        current_min = points[f_value.index(minimum)][0]
+
         # TODO: Add different stop condition
         while self.count_distance() > self.epsilon:
+            previous_min = current_min
             self.iteration += 1
             self.calculate_a_b_value(f_value, minimum, combinations)
             self.calculate_x1_x2_value()
@@ -45,6 +57,10 @@ class Algorithm:
                        range(len(points))]
             minimum = min(f_value)
             self.print_algorithm_result(f_value, minimum, points)
+            current_min = points[f_value.index(minimum)][0]
+
+            if self.stop_condition(previous_min, current_min) is not None and self.stop_condition(previous_min, current_min) <= self.epsilon:
+                break
 
         self.logger.append('\n------------------------ Wyniki ------------------------')
         self.print_algorithm_result(f_value, minimum, points)

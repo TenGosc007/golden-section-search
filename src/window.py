@@ -229,6 +229,7 @@ class Window(QMainWindow):
         """Function changes text to function in combo_box"""
         function = str(self.func_combo_box.currentText())
         stop_criterion = str(self.stop_criterion_combo_box.currentText())
+        stop_type = self.stop_criterion_combo_box.currentIndex()
         x1a, x1b = float(self.x1_a_input.text() or 0), float(self.x1_b_input.text() or 1)
         x2a, x2b = float(self.x2_a_input.text() or 0), float(self.x2_b_input.text() or 1)
         x3a, x3b = float(self.x3_a_input.text() or 0), float(self.x3_b_input.text() or 1)
@@ -269,7 +270,6 @@ class Window(QMainWindow):
             # b = [x1b, x2b, x3b, x4b, x5b]
             x0 = [0, 0, 0, 0, 0]  # temporary constant
             d = [1, 1, 1, 1, 1]
-            stop = None  # temporary
-            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop,
+            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop_type,
                                        self.math_interpreter.calculate, self.prompter)
             self.algorithm.find_minimum_value()
