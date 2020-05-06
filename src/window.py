@@ -249,6 +249,8 @@ class Window(QMainWindow):
 
         if not function or stop_criterion == 'Liczba iteracji L = ':
             self.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
+        elif stop_iteration <= 0:
+            self.create_error_message('Podano złą liczbę iteracji!')
         else:
             input_info = f'------------------------ Dane wejściowe ------------------------\n\n' \
                          f'Funkcja wejściowa:\ny = {function}\n\n' \
