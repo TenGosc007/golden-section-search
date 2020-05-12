@@ -13,7 +13,10 @@ class MathInterpreter:
     @staticmethod
     def var_value(vars_value):
         """Function returns list of variables with values."""
-        dict_comp = {f'x{i + 1}': vars_value[i] for i in range(len(vars_value))}
+        if type(vars_value) == float:
+            dict_comp = {'x1': vars_value}
+        else:
+            dict_comp = {f'x{i + 1}': vars_value[i] for i in range(len(vars_value))}
         return dict_comp
 
     def get_token_list(self):
