@@ -63,7 +63,7 @@ class Algorithm:
         """Function performing the stop criterion"""
         if previous_min != current_min:
             if self.stop == 0:
-                stop = abs(abs(current_min - previous_min))
+                stop = sqrt(sum([(current_min[i] - previous_min[i]) ** 2 for i in range(self.n)]))
                 return stop
             elif self.stop == 1:
                 stop = abs(curr_fmin - prev_fmin)
@@ -85,8 +85,9 @@ class Algorithm:
         f_value = [self.function(points[i]) if self.n > 1 else self.function(points[i][0]) for i in
                    range(len(points))]
         minimum = min(f_value)
+        current_min = points[f_value.index(minimum)]
 
-        current_min = points[f_value.index(minimum)][0]
+        self.print_algorithm_result(f_value, minimum, points)
 
         while True:
             previous_min = current_min
@@ -101,7 +102,7 @@ class Algorithm:
             minimum = min(f_value)
             self.print_algorithm_result(f_value, minimum, points)
 
-            current_min = points[f_value.index(minimum)][0]
+            current_min = points[f_value.index(minimum)]
             stop = self.stop_condition(previous_min, current_min, prev_fmin, minimum)
             if stop is not None and stop <= self.epsilon:
                 break
