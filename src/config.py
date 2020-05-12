@@ -4,7 +4,7 @@ class Config:
     APP_WIDTH = 1080
     APP_HEIGHT = 720
     TEMPLATE_FUNCTIONS = [
-        '(2 - x1)^2 + (2 - x2)^2'    # funkcja podana na konsultacjach
+        '(2 - x1)^2 + (2 - x2)^2',    # funkcja podana na konsultacjach
         'x1^4 + x2^4 - 0.62 * x1^2 - 0.62 * x2^2',  # funkcja z czterema minimami lokalnymi
         '100 * (x2 - x1^2)^2 + (1 - x1)^2',  # funkcja Rosenbrock'a
         '(x1 - x2 + x3)^2 + (-x1 + x2 + x3)^2 + (x1 + x2 - x3)^2',  # funkcja Zangwill'a
