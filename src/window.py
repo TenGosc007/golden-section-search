@@ -121,17 +121,10 @@ class Window(QMainWindow):
         self.grid_layout_right.addWidget(self.plot_field.canvas, 2, 0, 1, 10)
 
         self.x1_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 3, 0, 1, 1,
-                                                '        Zakres x1:')
+                                                'Zakres:')
         self.x1_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 2, 1, 1,
                                                  enabled=False, text='0')
         self.x1_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 3, 4, 1, 1,
-                                                 enabled=False, text='1')
-
-        self.x2_range_label = self.create_label(self.grid_layout_widget_right, self.grid_layout_right, 4, 0, 1, 2,
-                                                '        Zakres x2:')
-        self.x2_range_input1 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 2, 1, 1,
-                                                 enabled=False, text='0')
-        self.x2_range_input2 = self.create_input(self.grid_layout_widget_right, self.grid_layout_right, 4, 4, 1, 1,
                                                  enabled=False, text='1')
 
         self.draw_button = self.create_button(self.grid_layout_widget_right, self.grid_layout_right, 5, 0, 1, 10,
@@ -215,8 +208,6 @@ class Window(QMainWindow):
         enabled = True if variables_amount == 2 else False
         self.x1_range_input1.setEnabled(enabled)
         self.x1_range_input2.setEnabled(enabled)
-        self.x2_range_input1.setEnabled(enabled)
-        self.x2_range_input2.setEnabled(enabled)
         self.draw_button.setEnabled(enabled)
         self.reset_button.setEnabled(enabled)
 

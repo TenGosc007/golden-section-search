@@ -23,16 +23,14 @@ class PlotField:
         """Function plots chart."""
         x1 = self.window.x1_range_input1.text()
         x2 = self.window.x1_range_input2.text()
-        y1 = self.window.x2_range_input1.text()
-        y2 = self.window.x2_range_input2.text()
 
-        if not (x1 and x2 and y1 and y2):
+        if not (x1 and x2):
             self.window.create_error_message('Jedno z wymaganych pól nie jest wypełnione!')
         else:
             ax = self.figure.gca(projection='3d')
 
             x_surf = np.arange(float(x1), float(x2), abs(float(x2) - float(x1)) / 50)
-            y_surf = np.arange(float(y1), float(y2), abs(float(y2) - float(y1)) / 50)
+            y_surf = np.arange(float(x1), float(x2), abs(float(x2) - float(x1)) / 50)
             x_surf, y_surf = np.meshgrid(x_surf, y_surf)
 
             z_surf = np.zeros((len(x_surf), len(y_surf)))
@@ -42,10 +40,10 @@ class PlotField:
 
             ax.plot_surface(x_surf, y_surf, z_surf, rstride=1, cstride=1, cmap='viridis_r', alpha=.9)
 
-            width, height = abs(float(x2) - float(x1)) / 50, abs(float(y2) - float(y1)) / 50
+            size = abs(float(x2) - float(x1)) / 50
             xx, yy = self.window.algorithm.min_value
             zz = self.math_interpreter.calculate([xx, yy])
-            p = Ellipse((xx, yy), width, height, color='r')
+            p = Ellipse((xx, yy), size, size, color='r')
             ax.add_patch(p)
             art3d.pathpatch_2d_to_3d(p, z=zz, zdir="z")
 
