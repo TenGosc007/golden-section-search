@@ -4,17 +4,16 @@ import numpy as np
 
 
 class Algorithm:
-    def __init__(self, x0, d, n, tau, epsilon, stop, stop_iteration, function, logger):
+    def __init__(self, x0, d, n, epsilon, stop, stop_iteration, function, logger):
+        self.logger = logger
         self.epsilon = epsilon
         self.k = (sqrt(5) - 1) / 2
         self.n = n
-        self.tau = tau
         self.stop = stop
         self.stop_iteration = stop_iteration
         self.function = function
         self.a, self.b = self.get_range(x0, d)
         self.vars_dict = self.get_vars_dict(self.n)
-        self.logger = logger
         self.iteration = 0
         self.min_value = None
 
@@ -45,6 +44,7 @@ class Algorithm:
         x1 = x0 + step * (i - 1) * d
         a = d * (x1 - x0) / (d * d.transpose())
         b = d * (x2 - x0) / (d * d.transpose())
+        self.logger.append(f'\nDługość przedziału: a = {a}, b = {b}\n\n')
         return a, b
 
     def get_vars_dict(self, n):

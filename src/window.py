@@ -101,14 +101,10 @@ class Window(QMainWindow):
                                             '     d = ')
         self.x5_b_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 9, 5, 1, 2)
 
-        self.tau_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 10, 1, 1, 1,
-                                           '     \u03c4 = ')
-        self.tau_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 10, 2, 1, 1, text='1')
-
-        self.epsilon_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 10, 3, 1, 1,
+        self.epsilon_label = self.create_label(self.grid_layout_widget_left, self.grid_layout_left, 10, 1, 1, 1,
                                                '     \u03b5 = ')
-        self.epsilon_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 10, 4, 1, 1,
-                                               text='0.001')
+        self.epsilon_input = self.create_input(self.grid_layout_widget_left, self.grid_layout_left, 10, 2, 1, 2,
+                                               text='0.0001')
 
         self.func_button = self.create_button(self.grid_layout_widget_left, self.grid_layout_left, 11, 2, 1, 6,
                                               'Znajdź minimum',
@@ -235,7 +231,6 @@ class Window(QMainWindow):
         x3a, x3b = float(self.x3_a_input.text() or 0), float(self.x3_b_input.text() or 1)
         x4a, x4b = float(self.x4_a_input.text() or 0), float(self.x4_b_input.text() or 1)
         x5a, x5b = float(self.x5_a_input.text() or 0), float(self.x5_b_input.text() or 1)
-        tau = float(self.tau_input.text())
         epsilon = float(self.epsilon_input.text())
 
         if stop_criterion == 'Liczba iteracji':
@@ -262,12 +257,12 @@ class Window(QMainWindow):
                          f'Dla x3: x\u2080={x3a}, d={x3b}\n' \
                          f'Dla x4: x\u2080={x4a}, d={x4b}\n' \
                          f'Dla x5: x\u2080={x5a}, d={x5b}\n\n' \
-                         f'\u03c4={tau}\n\u03b5={epsilon}\n'
+                         f'\u03b5={epsilon}\n'
 
             self.prompter.append(input_info)
 
             x0 = [x1a, x2a, x3a, x4a, x5a]
             d = [x1b, x2b, x3b, x4b, x5b]
-            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), tau, epsilon, stop_type,
+            self.algorithm = Algorithm(x0, d, self.math_interpreter.variables_amount(), epsilon, stop_type,
                                        stop_iteration, self.math_interpreter.calculate, self.prompter)
             self.algorithm.find_minimum_value()
