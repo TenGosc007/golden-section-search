@@ -12,8 +12,8 @@ class Algorithm:
         self.stop = stop
         self.stop_iteration = stop_iteration
         self.function = function
-        self.a, self.b = self.get_range(x0, d)
-        self.vars_dict = self.get_vars_dict(self.n)
+        self.tau = self.get_range(x0, d)
+        self.vars_dict = self.get_vars_dict(x0, d, self.n)
         self.iteration = 0
         self.min_value = None
 
@@ -44,17 +44,18 @@ class Algorithm:
         x1 = x0 + step * (i - 1) * d
         a = d * (x1 - x0) / (d * d.transpose())
         b = d * (x2 - x0) / (d * d.transpose())
-        self.logger.append(f'\nDługość przedziału: a = {a}, b = {b}\n\n')
-        return a, b
+        tau = abs(b - a)
+        self.logger.append(f'\nDługość przedziału: tau = {tau[0]} \n\n')
+        return tau[0]
 
-    def get_vars_dict(self, n):
+    def get_vars_dict(self, x0, d, n):
         """Function initialises vars for algorithm."""
         vars_dict = {}
         for i in range(n):
-            vars_dict[f'a_{i}'] = self.a[i]
-            vars_dict[f'b_{i}'] = self.b[i]
-            vars_dict[f'x1_{i}'] = self.a[i] + (1 - self.k) * (self.b[i] - self.a[i])
-            vars_dict[f'x2_{i}'] = self.a[i] + self.k * (self.b[i] - self.a[i])
+            vars_dict[f'a_{i}'] = x0[i]
+            vars_dict[f'b_{i}'] = x0[i] + self.tau * d[i]
+            vars_dict[f'x1_{i}'] = x0[i] + (1 - self.k) * ((x0[i] + self.tau * d[i]) - x0[i])
+            vars_dict[f'x2_{i}'] = x0[i] + self.k * ((x0[i] + self.tau * d[i]) - x0[i])
 
         return vars_dict
 
