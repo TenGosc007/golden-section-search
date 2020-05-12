@@ -37,9 +37,9 @@ def example_function_n5(variables):
 
 def get_range():
     x0 = 0
-    d = 5
+    d = 1
 
-    krok = 0.01 * math.sqrt(d)
+    krok = 0.01 * math.sqrt(d * d)
     j = 0
     f = example_function_n1
     y0 = f(x0)
@@ -59,8 +59,8 @@ def get_range():
             break
     x2 = x
     x1 = x0 + krok * (j - 1) * d
-    a = d * (x1 - x0) / d
-    b = d * (x2 - x0) / d
+    a = d * (x1 - x0) / (d * d)
+    b = d * (x2 - x0) / (d * d)
 
     print(a, x1, x2, b)
 
