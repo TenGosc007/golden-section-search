@@ -1,5 +1,7 @@
 from math import sqrt
 
+import numpy as np
+
 
 class Algorithm:
     def __init__(self, x0, d, n, tau, epsilon, stop, stop_iteration, function, logger):
@@ -9,20 +11,50 @@ class Algorithm:
         self.tau = tau
         self.stop = stop
         self.stop_iteration = stop_iteration
-        self.vars_dict = self.get_vars_dict(x0, d, self.n)
         self.function = function
+        self.a, self.b = self.get_range(x0, d)
+        self.vars_dict = self.get_vars_dict(self.n)
         self.logger = logger
         self.iteration = 0
         self.min_value = None
 
-    def get_vars_dict(self, x0, d, n):
+    def get_range(self, x0, d):
+        """Function returns a and b."""
+        x0 = np.array(x0)
+        d = np.array(d)
+        f = self.function
+
+        step = 0.01 * np.sqrt(d * d.transpose())
+        i = 0
+        y0 = f(x0)
+        while i < 2:
+            x = x0 + step * d
+            y = f(x)
+            if y0 <= y:
+                step = -step
+                i += 1
+            else:
+                while y0 > y:
+                    step = 2 * step
+                    y0 = y
+                    x = x + step * d
+                    y = f(x)
+                i = 1
+                break
+        x2 = x
+        x1 = x0 + step * (i - 1) * d
+        a = d * (x1 - x0) / (d * d.transpose())
+        b = d * (x2 - x0) / (d * d.transpose())
+        return a, b
+
+    def get_vars_dict(self, n):
         """Function initialises vars for algorithm."""
         vars_dict = {}
         for i in range(n):
-            vars_dict[f'a_{i}'] = x0[i]
-            vars_dict[f'b_{i}'] = x0[i] + self.tau * d[i]
-            vars_dict[f'x1_{i}'] = x0[i] + (1 - self.k) * ((x0[i] + self.tau * d[i]) - x0[i])
-            vars_dict[f'x2_{i}'] = x0[i] + self.k * ((x0[i] + self.tau * d[i]) - x0[i])
+            vars_dict[f'a_{i}'] = self.a[i]
+            vars_dict[f'b_{i}'] = self.b[i]
+            vars_dict[f'x1_{i}'] = self.a[i] + (1 - self.k) * (self.b[i] - self.a[i])
+            vars_dict[f'x2_{i}'] = self.a[i] + self.k * (self.b[i] - self.a[i])
 
         return vars_dict
 
