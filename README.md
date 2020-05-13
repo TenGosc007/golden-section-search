@@ -23,6 +23,23 @@ Kierunek jest wektorem(?) na przykład [1, 2].
 
 Narysować warstwice dla n = 2 i zaznaczyć ostateczny punkt optymalny.
 
+### Uwagi podczas oddania
+
+Testowane na funkcjach:
+f(x) = sin(x1) * sin(x2) * exp(-(x1^2 + x2^2))
+x0 = [-4, 4]
+d = [1, -1]
+
+f(x) = (2 - x1)^2 + (2 - x2)^2
+x0 = [-2, -2]
+d = [1, 1]
+
+f(x) = x1^4 + x2^4 - 0.62 * x1^2 - 0.62 * x2^2
+x0 = ?
+d = ?
+
+Zrobić tak, aby sin(x1) * sin(x2) * exp(-(x1^2 + x2^2)) wpadało w oba minima. Oburzona o wynik dla x0 = [2, -3], d = [-1, 1]
+
 ## Praca z projektem
 Aby uruchomić aplikację po sklonowaniu repozytorium, należy zainstalować wymagane paczki.
 
