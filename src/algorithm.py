@@ -113,11 +113,17 @@ class Algorithm:
 
     def create_var_combinations(self):
         """Function creates 2^n combinations of available variables."""
-        vars_list = [[f'x1_{i}', f'x2_{i}'] for i in range(self.n)]
-        pools = [tuple(pool) for pool in vars_list]
-        result = [[]]
-        for pool in pools:
-            result = [x + [y] for x in result for y in pool]
+        # Previous way of getting point search  minimum in area not across line
+
+        # vars_list = [[f'x1_{i}', f'x2_{i}'] for i in range(self.n)]
+        # print(vars_list)
+        # pools = [tuple(pool) for pool in vars_list]
+        # print('pools', pools)
+        # result = [[]]
+        # for pool in pools:
+        #     result = [x + [y] for x in result for y in pool]
+
+        result = [[f'x{i}_0', f'x{i}_1'] for i in range(1, self.n + 1)]
         return result
 
     def get_points(self, var_list):
