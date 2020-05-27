@@ -13,6 +13,7 @@ class Config:
         '-20 * exp(-0.2 * sqrt(1/2 * (x1^2 + x2^2))) - exp(1/2 * (cos(2 * 3.14 * x1) + cos(2 * 3.14 * x2))',  # funkcja Ackley'a dla n = 2
         '[x1^2 - cos(18 * x1)] + [x2^2 - cos(18 * x2)]',   # funkcja Rastrigina dla n = 2
         '[x1^2 - cos(18 * x1)] + [x2^2 - cos(18 * x2)] + [x3^2 - cos(18 * x3)]',   # funkcja Rastrigina dla n = 3
+        '[x1^2 - cos(18 * x1)] + [x2^2 - cos(18 * x2)] + [x3^2 - cos(18 * x3)] + [x4^2 - cos(18 * x4)] + [x5^2 - cos(18 * x5)]',   # funkcja Rastrigina dla n = 5
         '4 * x1^2 - 2.1 * x1^4 + (x1^6) / 3 + x1 * x2 - 4 * x2^2 + 4 * x2^4',  # funkcja testowa Geem'a
         'sin(x1) * sin(x2) * exp(-(x1^2 + x2^2))',
         'x1 * exp(-(x1^2 + x2^2))',
